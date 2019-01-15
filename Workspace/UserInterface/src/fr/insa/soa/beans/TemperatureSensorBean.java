@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 public class TemperatureSensorBean {
 	private String id;
 	private ArrayList<TimedValue> values = new ArrayList<TimedValue>();
+	private Integer mapCoordX;
+	private Integer mapCoordY;
 
 	public String getId() {
 		return id;
@@ -35,6 +37,22 @@ public class TemperatureSensorBean {
 
 	public String getValue() {
 		return values.get(values.size()-1).getValue();
+	}
+	
+	public Integer getMapCoordX() {
+		return mapCoordX;
+	}
+
+	public void setMapCoordX(Integer mapCoordX) {
+		this.mapCoordX = mapCoordX;
+	}
+
+	public Integer getMapCoordY() {
+		return mapCoordY;
+	}
+
+	public void setMapCoordY(Integer mapCoordY) {
+		this.mapCoordY = mapCoordY;
 	}
 
 }

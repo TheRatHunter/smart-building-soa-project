@@ -60,6 +60,10 @@ public class IndexServlet extends HttpServlet {
 	}
 	
 	/**
+     * Perform GET request at provided url and returns result as Integer
+     */
+	
+	/**
      * Perform GET request at provided url and returns result as ArrayList<String>
      */
 	@SuppressWarnings("unchecked")
@@ -86,9 +90,15 @@ public class IndexServlet extends HttpServlet {
 			newBean.setId(sensorName);
 			temperatureSensorBeans.putIfAbsent(sensorName, newBean);			
 			// Get last temperature value
-			String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");			
+			String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId="+sensorName);			
 			// Add last value to bean
 			temperatureSensorBeans.get(sensorName).addValue(lastValue);
+			
+			// Get coordinates values (here because sensor can move)
+			Integer x = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/coordX?sensorId="+sensorName)));
+			Integer y = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/coordY?sensorId="+sensorName)));
+			temperatureSensorBeans.get(sensorName).setMapCoordX(x);
+			temperatureSensorBeans.get(sensorName).setMapCoordY(y);
 		}		
 			
 		// Pass number of temperature sensors as attribute

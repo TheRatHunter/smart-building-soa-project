@@ -57,8 +57,8 @@
 							Number of sensors :
 							<%
 							Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
-							out.println(Integer.toString(numberOfTemperatureSensors));
-						%>
+							out.println(String.format("<span id=\"tsnb\">%s</span>",Integer.toString(numberOfTemperatureSensors)));
+							%>
 						</p>
 						<p>
 							Value of sensors :
@@ -73,7 +73,7 @@
 										bean = new fr.insa.soa.beans.TemperatureSensorBean();
 										request.setAttribute(attrName, bean);
 									}
-									out.println(String.format("<li> %s : %s </li>", bean.getId(), bean.getValue().substring(0, 4)));
+									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : %s <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span> </li>", i, bean.getId(), bean.getValue().substring(0, 4), bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
 								}
 							%>
 						</ul>
@@ -96,7 +96,7 @@
 
 			<div class="container-fluid">
 				<div class="centered">
-					<canvas id="myCanvas" width=1000 height="500" style="border:1px solid #000000;"></canvas>
+					<canvas id="myCanvas" width=1000 height="500" style="border:1px solid #0f0c29;"></canvas>
 				</div>
 				<div style="display:none;">
 				  <img id="plan" src="img/plan.png"

@@ -10,13 +10,21 @@ public class TemperatureSensorsSystem {
 	public TemperatureSensorsSystem() {
 		super();
 		this.temperatureSensors = new HashMap<String, TemperatureSensor>();
-		temperatureSensors.putIfAbsent("sensor0", new TemperatureSensor(0));
-		temperatureSensors.putIfAbsent("sensor1", new TemperatureSensor(1));
-		temperatureSensors.putIfAbsent("sensor2", new TemperatureSensor(2));
+		temperatureSensors.putIfAbsent("sensor0", new TemperatureSensor(0, 331, 236));
+		temperatureSensors.putIfAbsent("sensor1", new TemperatureSensor(1, 690, 101));
+		temperatureSensors.putIfAbsent("sensor2", new TemperatureSensor(2, 571, 471));
 	}
 	
 	public Set<String> getSensors() {
 		return temperatureSensors.keySet();
+	}
+	
+	public double getMapCoordXFromSensor(String sensorId) {
+		return temperatureSensors.get(sensorId).getMapCoordX();
+	}
+	
+	public double getMapCoordYFromSensor(String sensorId) {
+		return temperatureSensors.get(sensorId).getMapCoordY();
 	}
 	
 	public double getTemperatureFromSensor(String sensorId) {

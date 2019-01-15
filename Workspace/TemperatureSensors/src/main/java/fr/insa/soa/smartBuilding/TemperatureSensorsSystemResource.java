@@ -38,4 +38,18 @@ public class TemperatureSensorsSystemResource {
     public double getSensorData(@QueryParam("sensorId") String sensorId) {
         return temperatureSensorsSystem.getTemperatureFromSensor(sensorId);
     }
+    
+    @GET
+    @Path("coordX")
+    @Produces(MediaType.APPLICATION_JSON)
+    public double getSensorMapCoordX(@QueryParam("sensorId") String sensorId) {
+        return temperatureSensorsSystem.getMapCoordXFromSensor(sensorId);
+    }
+    
+    @GET
+    @Path("coordY")
+    @Produces(MediaType.APPLICATION_JSON)
+    public double getSensorMapCoordY(@QueryParam("sensorId") String sensorId) {
+        return temperatureSensorsSystem.getMapCoordYFromSensor(sensorId);
+    }
 }

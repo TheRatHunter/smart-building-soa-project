@@ -16,7 +16,7 @@ body {
 
 .sidebar {
 	width: 90px !important;
-	background-color: #212529;
+	background-color: #0f0c29;
 	min-height: calc(100vh - 56px);
 	box-shadow: 1px 1px 12px #555;
 	overflow-y : auto;
@@ -79,6 +79,7 @@ body {
 	width: 90%;
 	align: center;
 	background: #ffffff;
+	color: #0f0c29;
 }
 
 .navbar {
@@ -283,7 +284,6 @@ body.fixed-nav.sidebar-toggled #content-wrapper {
 @media ( min-width : 768px) {
 	.sidebar {
 		width: 400px !important;
-		background-color: #0f0c29;
 	}
 	.sidebar .nav-item .nav-link {
 		display: block;
