@@ -2,6 +2,7 @@ package fr.insa.soa.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import javax.servlet.ServletException;
@@ -93,9 +94,13 @@ public class IndexServlet extends HttpServlet {
 		// Pass number of temperature sensors as attribute
 		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );			
 		
+		// Extract list of sensors and sort it by id
+		ArrayList<TemperatureSensorBean> beans = new ArrayList<TemperatureSensorBean>(temperatureSensorBeans.values());
+		beans.sort((TemperatureSensorBean o1, TemperatureSensorBean o2) -> o1.getId().compareTo(o2.getId()));
+		
 		// Pass sensor bean of each sensor as attribute
 		int i=0;
-		for (TemperatureSensorBean bean : temperatureSensorBeans.values()) {
+		for (TemperatureSensorBean bean : beans) {
 			request.setAttribute("ts"+Integer.toString(i), bean);
 			i++;
 		}		

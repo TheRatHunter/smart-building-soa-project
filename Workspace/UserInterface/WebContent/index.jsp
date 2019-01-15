@@ -28,6 +28,8 @@
 <!-- Custom styles for this template-->
 <link href="css/sb-admin.css" rel="stylesheet">
 
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
 </head>
 
 <body id="page-top">
@@ -36,64 +38,8 @@
 
 		<a class="navbar-brand mr-1" href="index.html">Smart Building
 			Dashboard</a>
-
-
-		<!-- Navbar Search -->
-		<form
-			class="d-none d-md-inline-block form-inline ml-auto mr-0 mr-md-3 my-2 my-md-0">
-			<div class="input-group">
-				<input type="text" class="form-control" placeholder="Search for..."
-					aria-label="Search" aria-describedby="basic-addon2">
-				<div class="input-group-append">
-					<button class="btn btn-primary" type="button">
-						<i class="fas fa-search"></i>
-					</button>
-				</div>
-			</div>
-		</form>
-
-		<!-- Navbar -->
-		<ul class="navbar-nav ml-auto ml-md-0">
-			<li class="nav-item dropdown no-arrow mx-1"><a
-				class="nav-link dropdown-toggle" href="#" id="alertsDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-bell fa-fw"></i> <span
-					class="badge badge-danger">9+</span>
-			</a>
-				<div class="dropdown-menu dropdown-menu-right"
-					aria-labelledby="alertsDropdown">
-					<a class="dropdown-item" href="#">Action</a> <a
-						class="dropdown-item" href="#">Another action</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Something else here</a>
-				</div></li>
-			<li class="nav-item dropdown no-arrow mx-1"><a
-				class="nav-link dropdown-toggle" href="#" id="messagesDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-envelope fa-fw"></i> <span
-					class="badge badge-danger">7</span>
-			</a>
-				<div class="dropdown-menu dropdown-menu-right"
-					aria-labelledby="messagesDropdown">
-					<a class="dropdown-item" href="#">Action</a> <a
-						class="dropdown-item" href="#">Another action</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Something else here</a>
-				</div></li>
-			<li class="nav-item dropdown no-arrow"><a
-				class="nav-link dropdown-toggle" href="#" id="userDropdown"
-				role="button" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false"> <i class="fas fa-user-circle fa-fw"></i>
-			</a>
-				<div class="dropdown-menu dropdown-menu-right"
-					aria-labelledby="userDropdown">
-					<a class="dropdown-item" href="#">Settings</a> <a
-						class="dropdown-item" href="#">Activity Log</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#" data-toggle="modal"
-						data-target="#logoutModal">Logout</a>
-				</div></li>
-		</ul>
+			
+		<button class="refresh-button" value="Refresh Page" onClick="window.location.reload()">Refresh</button>
 
 	</nav>
 
@@ -103,38 +49,57 @@
 			<li class="nav-item"><a class="nav-link" href="index.html">
 					<i class="fas fa-thermometer-half"></i> <span>&nbsp;&nbsp;Temperature</span>
 			</a></li>
+			<li>
+				<div class="shadow">
+					<div class="container">
+						<p class="sidebar-element-title">Sensors</p>
+						<p>
+							Number of sensors :
+							<%
+							Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
+							out.println(Integer.toString(numberOfTemperatureSensors));
+						%>
+						</p>
+						<p>
+							Value of sensors :
+						</p>
+						<ul>
+							<%
+								for (int i = 0; i < numberOfTemperatureSensors; i++) {
+									String attrName = "ts" + Integer.toString(i);
+									fr.insa.soa.beans.TemperatureSensorBean bean = (fr.insa.soa.beans.TemperatureSensorBean) request
+											.getAttribute(attrName);
+									if (bean == null) {
+										bean = new fr.insa.soa.beans.TemperatureSensorBean();
+										request.setAttribute(attrName, bean);
+									}
+									out.println(String.format("<li> %s : %s </li>", bean.getId(), bean.getValue().substring(0, 4)));
+								}
+							%>
+						</ul>
+					</div>
+				</div>
+			</li>
+			<li>
+				<div class="shadow">
+					<div class="container">
+						<p class="sidebar-element-title">Actuators</p>
+						
+					</div>
+				</div>
+			</li>
 		</ul>
 
 		<div id="content-wrapper">
 
 			<div class="container-fluid">
-
-				<h1>Yo dude</h1>
-
-				${test}
-				<button value="Refresh Page" onClick="window.location.reload()">Refresh</button>
-
-				<p>
-					Nombre de capteurs :
-					<% 
-            Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
-            out.println( Integer.toString(numberOfTemperatureSensors) ); 
-    %>
-				</p>
-				<p>Valeur des capteurs :</p>
-				<ul>
-					<%
- 		for (int i=0; i<numberOfTemperatureSensors; i++) {
- 			String attrName = "ts"+Integer.toString(i);
- 			fr.insa.soa.beans.TemperatureSensorBean bean = (fr.insa.soa.beans.TemperatureSensorBean) request.getAttribute(attrName); 
- 			if ( bean == null ){
- 				bean = new fr.insa.soa.beans.TemperatureSensorBean();
- 			    request.setAttribute( attrName, bean );
- 			}
- 			out.println("<li>"+bean.getValue()+"</li>");
- 		}
- 	%>
-				</ul>
+				<div class="centered">
+					<canvas id="myCanvas" width=1000 height="500" style="border:1px solid #000000;"></canvas>
+				</div>
+				<div style="display:none;">
+				  <img id="plan" src="img/plan.png"
+				       width="1000" height="500">
+				</div>
 
 			</div>
 		</div>
@@ -179,7 +144,7 @@
 	<!-- Page level plugin JavaScript-->
 	<script src="vendor/chart.js/Chart.min.js"></script>
 
-
+	<script src="js/smartBuilding.js"></script>
 
 </body>
 
