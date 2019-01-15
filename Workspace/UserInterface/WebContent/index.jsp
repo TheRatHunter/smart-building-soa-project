@@ -11,11 +11,21 @@
 
 ${test}
 <button value="Refresh Page" onClick="window.location.reload()">Refresh</button>
+
+<p>
+	Nombre de capteurs : 
+	<% 
+            String numberOfTemperatureSensors = Integer.toString((Integer) request.getAttribute("numberOfTemperatureSensors"));
+            out.println( numberOfTemperatureSensors ); 
+    %>
+</p>
 <p>
  	Valeur du capteur : 
  	
+ 	<%-- 
  	<jsp:useBean id="ts" class="fr.insa.soa.beans.TemperatureSensorBean" scope="request" />
  	${ts.value}
+ 	--%>
 </p>
 </body>
 <script>

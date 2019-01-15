@@ -2,6 +2,7 @@ package fr.insa.soa.servlets;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,6 +20,8 @@ import fr.insa.soa.beans.TemperatureSensorBean;
  */
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
        
     /**
      * @see HttpServlet#HttpServlet()
@@ -36,15 +39,26 @@ public class IndexServlet extends HttpServlet {
 		System.out.println("In servlet.");
 		
 		ArrayList<String> temperatureSensorNames = restApiGetArray("http://localhost:8080/TemperatureSensors/webapi/sensors");
-		System.out.println(temperatureSensorNames);
 		
-		String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");
-		
-		
-		TemperatureSensorBean ts = new TemperatureSensorBean();
-		ts.setValue(lastValue);		
-		request.setAttribute("ts", ts );
+		for (String sensorName : temperatureSensorNames) {
+			// Initialize entry with new bean if absent
+			TemperatureSensorBean newBean = new TemperatureSensorBean();
+			newBean.setId(sensorName);
+			temperatureSensorBeans.putIfAbsent(sensorName, newBean);
 			
+			// Get last temperature value
+			String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");
+			
+			// Add last value to bean
+			temperatureSensorBeans.get(sensorName).addValue(lastValue);
+		}
+		
+			
+		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );
+			
+		String ts = request.getParameter( "aa" );		
+		request.setAttribute( "ts", ts );
+		
 		String test = request.getParameter( "test" );		
 		request.setAttribute( "test", test );
 
@@ -67,6 +81,7 @@ public class IndexServlet extends HttpServlet {
 		return restResponse.readEntity(String.class);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private ArrayList<String> restApiGetArray(String url) {
 		Client client = ClientBuilder.newClient();
 		Response restResponse = client.target(url).request().get();

@@ -1,14 +1,40 @@
 package fr.insa.soa.beans;
 
-public class TemperatureSensorBean {
-	private String value;
+import java.util.ArrayList;
+import java.util.HashMap;
 
-	public String getValue() {
-		return value;
+import fr.insa.soa.helpers.TimedValue;
+
+import java.sql.Timestamp;
+
+public class TemperatureSensorBean {
+	private String id;
+	private ArrayList<TimedValue> values = new ArrayList<TimedValue>();
+
+	public String getId() {
+		return id;
 	}
 
-	public void setValue(String value) {
-		this.value = value;
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public void addValue(String value) {
+		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		TimedValue timedValue = new TimedValue(timestamp, value);
+		values.add(timedValue);
+	}
+
+	public ArrayList<TimedValue> getValues() {
+		return values;
+	}
+
+	public void setValues(ArrayList<TimedValue> values) {
+		this.values = values;
+	}
+
+	public TimedValue getValue() {
+		return values.get(values.size()-1);
 	}
 
 }
