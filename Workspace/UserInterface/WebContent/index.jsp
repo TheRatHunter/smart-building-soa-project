@@ -34,12 +34,12 @@
 
 <body id="page-top">
 
-	<nav class="navbar navbar-expand navbar-dark bg-dark static-top">
+	<nav class="navbar navbar-expand static-top">
 
-		<a class="navbar-brand mr-1" href="index.html">Smart Building
-			Dashboard</a>
+		<div class="title mr-1">Smart Building
+			Dashboard</div>
 			
-		<button class="refresh-button" value="Refresh Page" onClick="window.location.reload()">Refresh</button>
+		<button class="btn refresh-button" value="Refresh Page" onClick="window.location.reload()">Refresh</button>
 
 	</nav>
 
@@ -84,10 +84,12 @@
 				<div class="shadow">
 					<div class="container">
 						<p class="sidebar-element-title">Actuators</p>
+						<button class="btn custom-button" value="Refresh Page" onClick="window.location.reload()">Do stuff</button>
 						
 					</div>
 				</div>
 			</li>
+			
 		</ul>
 
 		<div id="content-wrapper">
