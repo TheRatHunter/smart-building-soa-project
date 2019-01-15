@@ -1,11 +1,16 @@
 package fr.insa.soa.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.core.Response;
 
 import fr.insa.soa.beans.TemperatureSensorBean;
 
@@ -30,9 +35,14 @@ public class IndexServlet extends HttpServlet {
 		
 		System.out.println("In servlet.");
 		
+		ArrayList<String> temperatureSensorNames = restApiGetArray("http://localhost:8080/TemperatureSensors/webapi/sensors");
+		System.out.println(temperatureSensorNames);
+		
+		String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");
+		
 		
 		TemperatureSensorBean ts = new TemperatureSensorBean();
-		ts.setValue("aa");		
+		ts.setValue(lastValue);		
 		request.setAttribute("ts", ts );
 			
 		String test = request.getParameter( "test" );		
@@ -50,5 +60,18 @@ public class IndexServlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		doGet(request, response);
 	}
+	
+	private String restApiGet(String url) {
+		Client client = ClientBuilder.newClient();
+		Response restResponse = client.target(url).request().get();
+		return restResponse.readEntity(String.class);
+	}
+	
+	private ArrayList<String> restApiGetArray(String url) {
+		Client client = ClientBuilder.newClient();
+		Response restResponse = client.target(url).request().get();
+		return restResponse.readEntity(ArrayList.class);
+	}
+	
 
 }

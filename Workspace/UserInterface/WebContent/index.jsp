@@ -15,7 +15,10 @@ ${test}
  	Valeur du capteur : 
  	
  	<jsp:useBean id="ts" class="fr.insa.soa.beans.TemperatureSensorBean" scope="request" />
- 	${ts.value }
+ 	${ts.value}
 </p>
 </body>
+<script>
+//setTimeout("window.location.reload()",10000);
+</script>
 </html>
