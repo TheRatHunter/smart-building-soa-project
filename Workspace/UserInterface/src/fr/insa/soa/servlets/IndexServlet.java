@@ -21,22 +21,61 @@ import fr.insa.soa.beans.TemperatureSensorBean;
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
+	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans;
        
     /**
-     * @see HttpServlet#HttpServlet()
+     * Constructor
      */
     public IndexServlet() {
         super();
-        // TODO Auto-generated constructor stub
+        temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+    /**
+     * GET method processing
+     */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		System.out.println("In servlet.");
+
+		request = aggregateTemperatureSensorsData(request);
+		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
+
+	}
+
+	/**
+     * POST method processing
+     */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generateHttpServletRequestd method stub
+		doGet(request, response);
+	}
+	
+	/**
+     * Perform GET request at provided url and returns result as String
+     */
+	private String restApiGet(String url) {
+		Client client = ClientBuilder.newClient();
+		Response restResponse = client.target(url).request().get();
+		return restResponse.readEntity(String.class);
+	}
+	
+	/**
+     * Perform GET request at provided url and returns result as ArrayList<String>
+     */
+	@SuppressWarnings("unchecked")
+	private ArrayList<String> restApiGetArray(String url) {
+		Client client = ClientBuilder.newClient();
+		Response restResponse = client.target(url).request().get();
+		return restResponse.readEntity(ArrayList.class);
+	}
+	
+	/**
+	 * Aggregates several attributes to the request :
+	 * numberOfTemperatureSensors, the number of temperature sensors
+	 * tsX, x between 0 and numberOfTemperatureSensors, the temperature sensor beans
+	 * @param  request  The request to process
+	 * @return 			The processed request
+	 */
+	private HttpServletRequest aggregateTemperatureSensorsData(HttpServletRequest request) {
 		
 		ArrayList<String> temperatureSensorNames = restApiGetArray("http://localhost:8080/TemperatureSensors/webapi/sensors");
 		
@@ -44,54 +83,24 @@ public class IndexServlet extends HttpServlet {
 			// Initialize entry with new bean if absent
 			TemperatureSensorBean newBean = new TemperatureSensorBean();
 			newBean.setId(sensorName);
-			temperatureSensorBeans.putIfAbsent(sensorName, newBean);
-			
+			temperatureSensorBeans.putIfAbsent(sensorName, newBean);			
 			// Get last temperature value
-			String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");
-			
+			String lastValue = restApiGet("http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensor2");			
 			// Add last value to bean
 			temperatureSensorBeans.get(sensorName).addValue(lastValue);
-		}
+		}		
+			
+		// Pass number of temperature sensors as attribute
+		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );			
 		
-			
-		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );
-			
+		// Pass sensor bean of each sensor as attribute
 		int i=0;
 		for (TemperatureSensorBean bean : temperatureSensorBeans.values()) {
 			request.setAttribute("ts"+Integer.toString(i), bean);
 			i++;
-		}
+		}		
+		return request;
 		
-		String ts = request.getParameter( "aa" );		
-		request.setAttribute( "ts", ts );
-		
-		String test = request.getParameter( "test" );		
-		request.setAttribute( "test", test );
-
-
-		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
-
-	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-	
-	private String restApiGet(String url) {
-		Client client = ClientBuilder.newClient();
-		Response restResponse = client.target(url).request().get();
-		return restResponse.readEntity(String.class);
-	}
-	
-	@SuppressWarnings("unchecked")
-	private ArrayList<String> restApiGetArray(String url) {
-		Client client = ClientBuilder.newClient();
-		Response restResponse = client.target(url).request().get();
-		return restResponse.readEntity(ArrayList.class);
 	}
 	
 
