@@ -33,8 +33,8 @@ public class TemperatureSensorBean {
 		this.values = values;
 	}
 
-	public TimedValue getValue() {
-		return values.get(values.size()-1);
+	public String getValue() {
+		return values.get(values.size()-1).getValue();
 	}
 
 }

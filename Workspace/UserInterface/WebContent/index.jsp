@@ -15,18 +15,28 @@ ${test}
 <p>
 	Nombre de capteurs : 
 	<% 
-            String numberOfTemperatureSensors = Integer.toString((Integer) request.getAttribute("numberOfTemperatureSensors"));
-            out.println( numberOfTemperatureSensors ); 
+            Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
+            out.println( Integer.toString(numberOfTemperatureSensors) ); 
     %>
 </p>
 <p>
- 	Valeur du capteur : 
- 	
- 	<%-- 
- 	<jsp:useBean id="ts" class="fr.insa.soa.beans.TemperatureSensorBean" scope="request" />
- 	${ts.value}
- 	--%>
+ 	Valeur des capteurs : 
 </p>
+<ul><%
+ 		for (int i=0; i<numberOfTemperatureSensors; i++) {
+ 			String attrName = "ts"+Integer.toString(i);
+ 			fr.insa.soa.beans.TemperatureSensorBean bean = (fr.insa.soa.beans.TemperatureSensorBean) request.getAttribute(attrName); 
+ 			if ( bean == null ){
+ 				bean = new fr.insa.soa.beans.TemperatureSensorBean();
+ 			    request.setAttribute( attrName, bean );
+ 			}
+ 			out.println("<li>"+bean.getValue()+"</li>");
+ 		}
+ 	%>
+</ul>
+ 	
+ 	
+ 	
 </body>
 <script>
 //setTimeout("window.location.reload()",10000);

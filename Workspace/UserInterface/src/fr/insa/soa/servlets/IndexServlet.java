@@ -56,6 +56,12 @@ public class IndexServlet extends HttpServlet {
 			
 		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );
 			
+		int i=0;
+		for (TemperatureSensorBean bean : temperatureSensorBeans.values()) {
+			request.setAttribute("ts"+Integer.toString(i), bean);
+			i++;
+		}
+		
 		String ts = request.getParameter( "aa" );		
 		request.setAttribute( "ts", ts );
 		
