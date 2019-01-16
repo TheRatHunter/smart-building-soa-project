@@ -14,6 +14,8 @@ public class HeatersSystem {
 		heaters.putIfAbsent("heater0", new Heater(0, 325, 88));
 		heaters.putIfAbsent("heater1", new Heater(1, 701, 210));
 		heaters.putIfAbsent("heater2", new Heater(2, 618, 324));
+		// Turn on heater one
+		heaters.get("heater2").setStatus(true);
 	}
 	
 	public Set<String> getHeaters() {

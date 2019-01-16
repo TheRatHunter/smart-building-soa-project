@@ -14,6 +14,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
+import fr.insa.soa.beans.HeaterBean;
 import fr.insa.soa.beans.TemperatureSensorBean;
 
 /**
@@ -22,14 +23,18 @@ import fr.insa.soa.beans.TemperatureSensorBean;
 public class IndexServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
+	// Bean containers definitions
 	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans;
+	private HashMap<String, HeaterBean> heaterBeans;
        
     /**
      * Constructor
      */
     public IndexServlet() {
         super();
+        // Bean containers creation
         temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
+        heaterBeans = new HashMap<String, HeaterBean>();
     }
 
     /**
@@ -38,6 +43,7 @@ public class IndexServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request = aggregateTemperatureSensorsData(request);
+		request = aggregateHeatersData(request);
 		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
 
 	}
@@ -114,6 +120,50 @@ public class IndexServlet extends HttpServlet {
 			request.setAttribute("ts"+Integer.toString(i), bean);
 			i++;
 		}		
+		
+		return request;
+		
+	}
+	
+	/**
+	 * Aggregates the heater attributes to the request
+	 * @param  request  The request to process
+	 * @return 			The processed request
+	 */
+	private HttpServletRequest aggregateHeatersData(HttpServletRequest request) {
+		
+		ArrayList<String> heaterNames = restApiGetArray("http://localhost:8080/Heaters/webapi/heaters");
+		
+		for (String heaterName : heaterNames) {
+			// Initialize entry with new bean if absent
+			HeaterBean newBean = new HeaterBean();
+			newBean.setId(heaterName);
+			heaterBeans.putIfAbsent(heaterName, newBean);			
+			// Get heater status
+			String status = restApiGet("http://localhost:8080/Heaters/webapi/heaters/heater?heaterId="+heaterName);			
+			// Add last value to bean
+			heaterBeans.get(heaterName).setStatus(Boolean.getBoolean(status));
+			
+			// Get coordinates values
+			Integer x = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Heaters/webapi/heaters/coordX?heaterId="+heaterName)));
+			Integer y = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Heaters/webapi/heaters/coordY?heaterId="+heaterName)));
+			heaterBeans.get(heaterName).setMapCoordX(x);
+			heaterBeans.get(heaterName).setMapCoordY(y);
+		}	
+		
+		// Pass number of heaters as attribute
+		request.setAttribute("numberOfHeaters", heaterBeans.size() );			
+		
+		// Extract list of heaters and sort it by id
+		ArrayList<HeaterBean> beans = new ArrayList<HeaterBean>(heaterBeans.values());
+		beans.sort((HeaterBean o1, HeaterBean o2) -> o1.getId().compareTo(o2.getId()));
+		
+		// Pass heater bean of each heater as attribute
+		int i=0;
+		for (HeaterBean bean : beans) {
+			request.setAttribute("h"+Integer.toString(i), bean);
+			i++;
+		}	
 		
 		return request;
 		
