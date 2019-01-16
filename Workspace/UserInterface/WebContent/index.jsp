@@ -73,7 +73,15 @@
 										bean = new fr.insa.soa.beans.TemperatureSensorBean();
 										request.setAttribute(attrName, bean);
 									}
-									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <span id=\"tsval%s\">%s</span> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span> </li>", i, bean.getId(), bean.getId(), bean.getValue().substring(0, 4), bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <span id=\"tsval%s\">%s</span> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span>", i, bean.getId(), bean.getId(), bean.getValue().substring(0, 4), bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+									int nbValues = bean.getValues().size();
+									out.println(String.format("<span hidden id=\"tsnbpoints%s\">%s</span>", bean.getId(), Integer.toString(nbValues)));
+									out.println("<ul hidden>");
+									for (int j=0; j<nbValues; j++) {
+										out.println(String.format("<li><span hidden id=\"tspointtime%s%d\">%s</span><span hidden id=\"tspointval%s%d\">%s</span></li>", bean.getId(), j, bean.getValues().get(j).getTimestamp(), bean.getId(), j, bean.getValues().get(j).getValue()));
+									}
+									out.println("</ul>");
+									out.println(" </li>");
 								}
 							%>
 						</ul>

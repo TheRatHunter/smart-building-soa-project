@@ -114,6 +114,7 @@ public class IndexServlet extends HttpServlet {
 			request.setAttribute("ts"+Integer.toString(i), bean);
 			i++;
 		}		
+		
 		return request;
 		
 	}
