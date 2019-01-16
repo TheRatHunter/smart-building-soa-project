@@ -102,7 +102,7 @@
 									out.println(String.format("<li> <span id=\"hid%s\">%s</span> : <b><span id=\"hval%s\" class=\"status%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span><br/>", i, bean.getId(), bean.getId(), status, status, bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
 									String checkProperty = bean.getStatus() ? "checked" : "";
 									out.println("<label class=\"switch\">");
-									out.println(String.format("<input id=\"checkboxheater%d\" type=\"checkbox\" %s>", i, checkProperty));
+									out.println(String.format("<input onchange=\"updateHeater(this);\" id=\"checkboxheater%d\" type=\"checkbox\" %s>", i, checkProperty));
 									out.println("<span class=\"slider round\"></span>");
 									out.println("</label>");
 									out.println("</li>");

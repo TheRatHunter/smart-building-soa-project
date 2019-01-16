@@ -2,6 +2,7 @@ package fr.insa.soa.smartBuilding.Heaters;
 
 import java.util.Set;
 
+import javax.inject.Singleton;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -11,7 +12,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-
+@Singleton
 @Path("heaters")
 public class HeatersSystemResource {
 	
@@ -40,8 +41,7 @@ public class HeatersSystemResource {
     @Consumes(MediaType.TEXT_PLAIN)
     public void setHeaterStatus(@PathParam("heaterId") String heaterId, @PathParam("status") boolean status) {
     	heaters.setStatusOfHeater(heaterId, status);
-    	System.out.println("Updated heater "+heaterId+" with status "+Boolean.toString(status)+".");
-    }
+   }
     
     @GET
     @Path("coordX")

@@ -9,15 +9,44 @@ var tempSensorsCoords = [];
 
 
 //Update checkboxes
-var nbHeaters = parseInt($("#hnb").text());
-for (var i=0; i<nbHeaters; i++) {
-	if ($("#hvalheater"+i.toString()).text()==="ON") {
-		$("#checkboxheater"+i.toString()).prop('checked', true);
-	} else {
-		$("#checkboxheater"+i.toString()).prop('checked', false);
+function updateCheckboxes()
+{
+	var nbHeaters = parseInt($("#hnb").text());
+	for (var i=0; i<nbHeaters; i++) {
+		if ($("#hvalheater"+i.toString()).text()==="ON") {
+			$("#checkboxheater"+i.toString()).prop('checked', true);
+		} else {
+			$("#checkboxheater"+i.toString()).prop('checked', false);
+		}
 	}
 }
-	
+updateCheckboxes();
+
+function updateHeater(element)
+{
+	var nbHeaters = parseInt($("#hnb").text());
+	for (var i=0; i<nbHeaters; i++) {
+		if (element.checked) {
+			if(element.attributes.id.nodeValue === ("checkboxheater"+i.toString())) {
+				console.log("Sending status on for heater"+i.toString());
+				$.get("PostCallServlet?heaterId=heater"+i.toString()+"&state=true", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+				$("#hvalheater"+i.toString()).text("ON");
+			}
+		} else {
+			if(element.attributes.id.nodeValue === ("checkboxheater"+i.toString())) {
+				console.log("Sending status off for heater"+i.toString());
+				$.get("PostCallServlet?heaterId=heater"+i.toString()+"&state=false", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+				$("#hvalheater"+i.toString()).text("OFF");
+			}
+		}
+	}
+	updateCheckboxes();
+  
+}
 	
 var img = new Image();
 img.onload = function() {

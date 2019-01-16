@@ -16,7 +16,7 @@ public class Heater {
 	}
 	
 	public boolean getStatus() {
-		return status;
+		return this.status;
 	}
 	public void setStatus(boolean status) {
 		this.status = status;
