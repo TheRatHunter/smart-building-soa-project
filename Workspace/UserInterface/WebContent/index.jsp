@@ -46,7 +46,7 @@
 	<div id="wrapper">
 		<!-- Sidebar -->
 		<ul class="sidebar navbar-nav">
-			<li class="nav-item"><a class="nav-link" href="index.html">
+			<li class="nav-item"><a class="nav-link" href="">
 					<i class="fas fa-thermometer-half"></i> <span>&nbsp;&nbsp;Temperature</span>
 			</a></li>
 			<li>
