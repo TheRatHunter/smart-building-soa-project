@@ -19,20 +19,40 @@ Under the file ```TOMCAT_HOME/bin/setenv.sh``` (UNIX) (create if it doesn't exis
 
 ### Temperature sensors REST API
 
-To get a a table containing the names of available sensors : 
+To get a a table containing the names of available sensors (GET) : 
 
 > http://localhost:8080/TemperatureSensors/webapi/sensors
 
-To get a value from a sensor 
+To get a value from a sensor (GET) :
 
 > http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensorX
 
-To get a sensor's position on the room map : 
+To get a sensor's position on the room map (GET) : 
 
 > http://localhost:8080/TemperatureSensors/webapi/sensors/coordX?sensorId==sensorX
 
 > http://localhost:8080/TemperatureSensors/webapi/sensors/coordY?sensorId==sensorX
 
-### Other APIs...
+### Heaters REST API
+
+To get a table of all available heaters :
+
+> http://localhost:8080/Heaters/webapi/heaters
+
+To get the status of a heater (GET) :
+
+> http://localhost:8080/Heaters/webapi/heaters/heater?heaterId=heaterX
+
+To set the status of a heater (PUT) :
+
+> http://localhost:8080/Heaters/webapi/heaters/heater/heaterX/true
+
+To get a heater's potition on the room map (GET) :
+
+> http://localhost:8080/Heaters/webapi/heaters/coordX?heaterId=heaterX
+
+> http://localhost:8080/Heaters/webapi/heaters/coordY?heaterId=heaterX
+
+
 
 ## Client
