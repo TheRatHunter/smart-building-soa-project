@@ -3,9 +3,11 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var modal = document.getElementById("myModal");
+var modal2 = document.getElementById("myModalNoGraph");
 
 
 var tempSensorsCoords = [];
+var heatersCoords = [];
 
 
 //Update checkboxes
@@ -64,8 +66,17 @@ img.onload = function() {
 		var y = parseInt($("#"+tempSensorsId+"Y").text());
 		
 		tempSensorsCoords.push({x: x, y: y, i: i});
-		drawTempSensor(x, y, i);
+		drawTempSensor(x, y, i);		
+	}
+	
+	var heatersNb = parseInt($("#hnb").text());
+	for (var i=0; i<heatersNb; i++) {
+		var heatersId = $("#hid"+(i.toString())).text();		
+		var x = parseInt($("#"+heatersId+"X").text());
+		var y = parseInt($("#"+heatersId+"Y").text());
 		
+		heatersCoords.push({x: x, y: y, i: i});
+		drawHeaterOn(x, y, i);		
 	}
 
 	drawLegend();
@@ -89,7 +100,7 @@ canvas.addEventListener('click', function(evt) {
 }, false);
 
 function drawTempSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(51, 204, 51)', 'rgb(20, 82, 20)');
+	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(20, 82, 20)');
 }
 
 function drawHoveredSensor(x, y, nb) {
@@ -97,19 +108,47 @@ function drawHoveredSensor(x, y, nb) {
 }
 
 function drawLumSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 26)', 'rgb(179, 179, 0)');
+	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(179, 179, 0)');
 }
 
 function drawSensor(x, y, nb, color1, color2) {
 	ctx.beginPath();
 	ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
-	ctx.fillStyle = color1; //'rgb(51, 204, 51, 0.8)';
+	ctx.fillStyle = color1; 
 	ctx.fill();
 	ctx.lineWidth = 5;
-	ctx.strokeStyle = color2; //'rgb(20, 82, 20, 0.8)';
+	ctx.strokeStyle = color2;
 	ctx.stroke();
 
-	ctx.fillStyle = color2 //'rgb(20, 82, 20, 0.8)';
+	ctx.fillStyle = color2;
+	ctx.font = "16px Arial";
+	ctx.fillText(nb.toString(), x-4, y+6); 
+}
+
+function drawHoveredHeater(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(102, 0, 0)', 'rgb(128, 0, 0)');
+}
+
+function drawHeaterOff(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 51, 51)', 'rgb(128, 0, 0)');
+}
+
+function drawHeaterOn(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(128, 0, 0)');
+}
+
+function drawActuator(x, y, nb, color1, color2) {
+	ctx.fillStyle = color1 ;
+	ctx.fillRect(x-18, y-18, 36, 36);
+	
+	ctx.beginPath();
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = color2;
+	ctx.rect(x-18, y-18, 36, 36);
+	ctx.stroke();
+	
+
+	ctx.fillStyle = color2;
 	ctx.font = "16px Arial";
 	ctx.fillText(nb.toString(), x-4, y+6); 
 }
@@ -133,6 +172,20 @@ function drawLegend() {
 	ctx.font = "16px Arial";
 	ctx.fillText("Luminosity :", 40, 135); 
 	drawLumSensor(180, 130, 0);
+	
+	// Title
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "bold 16px Arial";
+	ctx.fillText("Actuators :", 30, 185); 
+	
+	// Heater 
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "16px Arial";
+	ctx.fillText("Heaters:", 40, 225); 
+	ctx.fillText("OFF :", 50, 255); 
+	ctx.fillText("ON :", 50, 310); 
+	drawHeaterOff(180, 250, 0);
+	drawHeaterOn(180, 305, 0);
 }
 
 
@@ -151,11 +204,12 @@ window.onmousemove = function(e) {
 	
 	// Variables needed to display modal & chart
 	var toggle = false;
+	var toggle2 = false;
 	var chartSensorId = "";
 	var chartValues = "";
 	var chartSensorValues = [];
 
-	// Hovering color
+	// Hovering color (Temperature sensors)
 	while(r = tempSensorsCoords[i++]) {
 		if ((x>r.x-20) && (x<(r.x+20)) && (y>r.y-20) && (y<(r.y+20))) {
 			drawHoveredSensor(r.x, r.y, r.i);
@@ -167,6 +221,7 @@ window.onmousemove = function(e) {
 			$("#modal-value-sensor").text(tempSensorsId);		
 			$("#modal-value-value").text(tempSensorVal);
 			
+			// Get values for graph
 			var tempSensorNbValues = $("#tsnbpoints"+tempSensorsId).text();
 			for (var i=0; i<tempSensorNbValues; i++) {
 				var tempTimestamp = $("#tspointtime"+tempSensorsId+i.toString()).text();
@@ -174,11 +229,30 @@ window.onmousemove = function(e) {
 				chartSensorValues.push({x: new Date(tempTimestamp), y: Math.round(tempValue)});
 			}
 			
-			// Assign variables values with selected sensor
+			// Assign variables values with selected sensor for graph
 			chartSensorId = tempSensorsId;		
 			
 		} else {
 			drawTempSensor(r.x, r.y, r.i);
+		}
+	}
+	
+	var s;
+	i=0;
+	
+	// Hovering color (heaters)
+	while(s = heatersCoords[i++]) {
+		if ((x>s.x-18) && (x<(s.x+18)) && (y>s.y-18) && (y<(s.y+18))) {
+			drawHoveredHeater(s.x, s.y, s.i);
+			toggle2 = true;
+			
+			// Compute jQuery requests to gather values
+			var heaterId = $("#hid"+((i-1).toString())).text();
+			var heaterVal = $("#hval"+heaterId).text();			
+			$("#modal-value-actuator").text(heaterId);		
+			$("#modal-value-status").text(heaterVal);
+		} else {
+			drawHeaterOn(s.x, s.y, s.i);
 		}
 	}
 
@@ -219,6 +293,12 @@ window.onmousemove = function(e) {
 		//---
 	} else {
 		modal.style.display = "none";
+	}
+	
+	if (toggle2) {
+		modal2.style.display = "block";
+	} else {
+		modal2.style.display = "none";		
 	}
 	
 

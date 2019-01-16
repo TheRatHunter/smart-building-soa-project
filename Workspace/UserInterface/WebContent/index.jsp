@@ -121,17 +121,20 @@
 				<div class="centered">		
 					<canvas id="myCanvas" width=1000 height="500" style="border:1px solid #0f0c29;"></canvas>
 				
-					
-					<!-- The Modal -->
+					 
 					<div id="myModal" class="modal">
-					
-					  <!-- Modal content -->
-					  <div class="modal-content">
+					  <div class="modal-content" style="height: 500px;">
 					    <p><span id="modal-value-sensor"></span> : <b><span id="modal-value-value"></span></b></p><br/>
 					    <div id="chartContainer" style=""></div>
-					  </div>
-					
+					  </div>					
 					</div>
+					
+					<div id="myModalNoGraph" class="modal">					
+					  <div class="modal-content">
+					    <p><span id="modal-value-actuator"></span> : <b><span id="modal-value-status"></span></b></p><br/>
+					  </div>					
+					</div> 
+					
 				</div>
 				<div style="display:none;">
 				  <img id="plan" src="img/plan.png"

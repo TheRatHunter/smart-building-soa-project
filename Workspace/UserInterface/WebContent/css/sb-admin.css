@@ -74,7 +74,6 @@ input:checked + .slider:before {
 .statusON{
 	color: green;
 }
- // Modal
  
 .modal {
   display: none; /* Hidden by default */
@@ -92,19 +91,18 @@ input:checked + .slider:before {
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: auto; /* 15% from the top and centered */
-  margin-top: 5%;
+  margin: 5% auto; /* 15% from the top and centered */
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
-  height: 500px;
+  
 }
 
-// !MODAL
  
 html {
   height: 100%;
 }
+
 body {
   min-height: 100%;
   height: 100%;
