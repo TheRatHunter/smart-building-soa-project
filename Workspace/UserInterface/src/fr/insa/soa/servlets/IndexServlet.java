@@ -142,8 +142,7 @@ public class IndexServlet extends HttpServlet {
 			// Get heater status
 			String status = restApiGet("http://localhost:8080/Heaters/webapi/heaters/heater?heaterId="+heaterName);			
 			// Add last value to bean
-			heaterBeans.get(heaterName).setStatus(Boolean.getBoolean(status));
-			
+			heaterBeans.get(heaterName).setStatus(status.equals("true"));
 			// Get coordinates values
 			Integer x = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Heaters/webapi/heaters/coordX?heaterId="+heaterName)));
 			Integer y = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Heaters/webapi/heaters/coordY?heaterId="+heaterName)));

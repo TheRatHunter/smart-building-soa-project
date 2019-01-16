@@ -5,7 +5,12 @@
  * Modified by Laurent Chasserat
  */
  
-
+.statusOFF{
+	color: red;
+}
+.statusON{
+	color: green;
+}
  // Modal
  
 .modal {

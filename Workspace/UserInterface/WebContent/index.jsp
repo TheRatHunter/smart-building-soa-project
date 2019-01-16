@@ -92,8 +92,31 @@
 				<div class="shadow">
 					<div class="container">
 						<p class="sidebar-element-title">Actuators</p>
-						<button class="btn custom-button" value="Refresh Page" onClick="window.location.reload()">Do stuff</button>
-						
+						<p>
+							Number of heaters :
+							<%
+							Integer numberOfHeaters = (Integer) request.getAttribute("numberOfHeaters");
+							out.println(String.format("<span id=\"tsnb\">%s</span>",Integer.toString(numberOfHeaters)));
+							%>
+						</p>
+						<p>
+							Status :
+						</p>
+						<ul>
+							<%
+								for (int i = 0; i < numberOfHeaters; i++) {
+									String attrName = "h" + Integer.toString(i);
+									fr.insa.soa.beans.HeaterBean bean = (fr.insa.soa.beans.HeaterBean) request
+											.getAttribute(attrName);
+									if (bean == null) {
+										bean = new fr.insa.soa.beans.HeaterBean();
+										request.setAttribute(attrName, bean);
+									}
+									String status = bean.getStatus() ? "ON" : "OFF";
+									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <b><span id=\"tsval%s\" class=\"status%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span>", i, bean.getId(), bean.getId(), status, status, bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+								}
+							%>
+						</ul>
 					</div>
 				</div>
 			</li>
