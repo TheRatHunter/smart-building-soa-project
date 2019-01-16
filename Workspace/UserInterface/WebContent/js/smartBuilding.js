@@ -7,6 +7,18 @@ var modal = document.getElementById("myModal");
 
 var tempSensorsCoords = [];
 
+
+//Update checkboxes
+var nbHeaters = parseInt($("#hnb").text());
+for (var i=0; i<nbHeaters; i++) {
+	if ($("#hvalheater"+i.toString()).text()==="ON") {
+		$("#checkboxheater"+i.toString()).prop('checked', true);
+	} else {
+		$("#checkboxheater"+i.toString()).prop('checked', false);
+	}
+}
+	
+	
 var img = new Image();
 img.onload = function() {
 	ctx.drawImage(img, 0, 0);

@@ -53,19 +53,12 @@
 				<div class="shadow">
 					<div class="container">
 						<p class="sidebar-element-title">Sensors</p>
-						<p>
-							Number of sensors :
-							<%
-							Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
-							out.println(String.format("<span id=\"tsnb\">%s</span>",Integer.toString(numberOfTemperatureSensors)));
-							%>
-						</p>
-						<p>
-							Value of sensors :
-						</p>
+						
 						<ul>
 							<%
-								for (int i = 0; i < numberOfTemperatureSensors; i++) {
+							Integer numberOfTemperatureSensors = (Integer) request.getAttribute("numberOfTemperatureSensors");
+							out.println(String.format("<li hidden><span id=\"tsnb\">%s</span></li>",Integer.toString(numberOfTemperatureSensors)));
+							for (int i = 0; i < numberOfTemperatureSensors; i++) {
 									String attrName = "ts" + Integer.toString(i);
 									fr.insa.soa.beans.TemperatureSensorBean bean = (fr.insa.soa.beans.TemperatureSensorBean) request
 											.getAttribute(attrName);
@@ -92,19 +85,12 @@
 				<div class="shadow">
 					<div class="container">
 						<p class="sidebar-element-title">Actuators</p>
-						<p>
-							Number of heaters :
-							<%
-							Integer numberOfHeaters = (Integer) request.getAttribute("numberOfHeaters");
-							out.println(String.format("<span id=\"tsnb\">%s</span>",Integer.toString(numberOfHeaters)));
-							%>
-						</p>
-						<p>
-							Status :
-						</p>
+							
 						<ul>
 							<%
-								for (int i = 0; i < numberOfHeaters; i++) {
+							Integer numberOfHeaters = (Integer) request.getAttribute("numberOfHeaters");
+							out.println(String.format("<li hidden><span id=\"hnb\">%s</span></li>",Integer.toString(numberOfHeaters)));
+							for (int i = 0; i < numberOfHeaters; i++) {
 									String attrName = "h" + Integer.toString(i);
 									fr.insa.soa.beans.HeaterBean bean = (fr.insa.soa.beans.HeaterBean) request
 											.getAttribute(attrName);
@@ -113,8 +99,14 @@
 										request.setAttribute(attrName, bean);
 									}
 									String status = bean.getStatus() ? "ON" : "OFF";
-									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <b><span id=\"tsval%s\" class=\"status%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span>", i, bean.getId(), bean.getId(), status, status, bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
-								}
+									out.println(String.format("<li> <span id=\"hid%s\">%s</span> : <b><span id=\"hval%s\" class=\"status%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span><br/>", i, bean.getId(), bean.getId(), status, status, bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+									String checkProperty = bean.getStatus() ? "checked" : "";
+									out.println("<label class=\"switch\">");
+									out.println(String.format("<input id=\"checkboxheater%d\" type=\"checkbox\" %s>", i, checkProperty));
+									out.println("<span class=\"slider round\"></span>");
+									out.println("</label>");
+									out.println("</li>");
+							}
 							%>
 						</ul>
 					</div>
