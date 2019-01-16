@@ -104,7 +104,8 @@
 					
 					  <!-- Modal content -->
 					  <div class="modal-content">
-					    <p><span id="modal-value"></span></p>
+					    <p><span id="modal-value"></span></p><br/>
+					    <div id="chartContainer" style=""></div>
 					  </div>
 					
 					</div>
@@ -132,6 +133,9 @@
 	<script src="vendor/chart.js/Chart.min.js"></script>
 
 	<script src="js/smartBuilding.js"></script>
+	<script src="js/chart.js"></script>
+	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+
 
 </body>
 

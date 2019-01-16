@@ -5,6 +5,7 @@
  * Modified by Laurent Chasserat
  */
  
+
  // Modal
  
 .modal {
@@ -23,10 +24,12 @@
 /* Modal Content/Box */
 .modal-content {
   background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
+  margin: auto; /* 15% from the top and centered */
+  margin-top: 5%;
   padding: 20px;
   border: 1px solid #888;
   width: 80%; /* Could be more or less, depending on screen size */
+  height: 500px;
 }
 
 // !MODAL

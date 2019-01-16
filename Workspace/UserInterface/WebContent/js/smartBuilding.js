@@ -108,6 +108,8 @@ window.onmousemove = function(e) {
 	var r;
 	
 	var toggle = false;
+	var chartSensorId = "";
+	var chartValues = "";
 
 	// Hovering color
 	while(r = tempSensorsCoords[i++]) {
@@ -119,6 +121,8 @@ window.onmousemove = function(e) {
 			var tempSensorVal = $("#tsval"+tempSensorsId).text();			
 			$("#modal-value").text(tempSensorsId+" : "+tempSensorVal);
 			
+			chartSensorId = tempSensorsId;
+			
 		} else {
 			drawTempSensor(r.x, r.y, r.i);
 		}
@@ -128,6 +132,53 @@ window.onmousemove = function(e) {
 	if (toggle) {
 		modal.style.display = "block";
 		canvasOpen=true;
+		
+		//---
+		var chart = new CanvasJS.Chart("chartContainer", {
+			width: 1010,
+			animationEnabled: true,
+			axisY: {
+				title: "Temperature (in °C)",
+				includeZero: false,
+				suffix: " °C"
+			},
+			legend:{
+				cursor: "pointer",
+				fontSize: 16,
+				itemclick: toggleDataSeries
+			},
+			toolTip:{
+				shared: true
+			},
+			data: [{
+				name: chartSensorId,
+				type: "spline",
+				yValueFormatString: "#0.## °C",
+				showInLegend: true,
+				dataPoints: [
+					{ x: new Date(2017,6,24), y: 31 },
+					{ x: new Date(2017,6,25), y: 31 },
+					{ x: new Date(2017,6,26), y: 29 },
+					{ x: new Date(2017,6,27), y: 29 },
+					{ x: new Date(2017,6,28), y: 31 },
+					{ x: new Date(2017,6,29), y: 30 },
+					{ x: new Date(2017,6,30), y: 29 }
+				]
+			}]
+		});
+		chart.render();
+		
+		function toggleDataSeries(e){
+			if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+				e.dataSeries.visible = false;
+			}
+			else{
+				e.dataSeries.visible = true;
+			}
+			chart.render();
+		}
+		
+		//---
 	} else {
 		modal.style.display = "none";
 	}
