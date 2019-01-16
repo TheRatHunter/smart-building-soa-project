@@ -141,7 +141,6 @@
 	<script src="vendor/chart.js/Chart.min.js"></script>
 
 	<script src="js/smartBuilding.js"></script>
-	<script src="js/chart.js"></script>
 	<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
 

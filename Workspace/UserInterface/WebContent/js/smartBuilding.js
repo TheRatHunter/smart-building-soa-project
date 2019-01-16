@@ -9,23 +9,19 @@ var tempSensorsCoords = [];
 
 var img = new Image();
 img.onload = function() {
-	console.log("Drawing image.");
 	ctx.drawImage(img, 0, 0);
 
-	console.log("Drawing sensors.");
 	var tempSensorsNb = parseInt($("#tsnb").text());
 	for (var i=0; i<tempSensorsNb; i++) {
 		var tempSensorsId = $("#tsid"+(i.toString())).text();		
-		var x = parseInt($("#"+tempSensorsId+"X:hidden").text());
-		var y = parseInt($("#"+tempSensorsId+"Y:hidden").text());
+		var x = parseInt($("#"+tempSensorsId+"X").text());
+		var y = parseInt($("#"+tempSensorsId+"Y").text());
 		
-		console.log("X : "+x.toString()+", Y : "+y.toString());
 		tempSensorsCoords.push({x: x, y: y, i: i});
 		drawTempSensor(x, y, i);
 		
 	}
 
-	console.log("Drawing legend.");
 	drawLegend();
 };
 img.src = "img/plan.png";50
@@ -107,9 +103,11 @@ window.onmousemove = function(e) {
 	var i = 0;
 	var r;
 	
+	// Variables needed to display modal & chart
 	var toggle = false;
 	var chartSensorId = "";
 	var chartValues = "";
+	var chartSensorValues = [];
 
 	// Hovering color
 	while(r = tempSensorsCoords[i++]) {
@@ -117,11 +115,20 @@ window.onmousemove = function(e) {
 			drawHoveredSensor(r.x, r.y, r.i);
 			toggle = true;
 			
+			// Compute jQuery requests to gather values
 			var tempSensorsId = $("#tsid"+((i-1).toString())).text();
 			var tempSensorVal = $("#tsval"+tempSensorsId).text();			
 			$("#modal-value").text(tempSensorsId+" : "+tempSensorVal);
 			
-			chartSensorId = tempSensorsId;
+			var tempSensorNbValues = $("#tsnbpoints"+tempSensorsId).text();
+			for (var i=0; i<tempSensorNbValues; i++) {
+				var tempTimestamp = $("#tspointtime"+tempSensorsId+i.toString()).text();
+				var tempValue = $("#tspointval"+tempSensorsId+i.toString()).text();
+				chartSensorValues.push({x: new Date(tempTimestamp), y: Math.floor(tempValue)});
+			}
+			
+			// Assign variables values with selected sensor
+			chartSensorId = tempSensorsId;		
 			
 		} else {
 			drawTempSensor(r.x, r.y, r.i);
@@ -133,7 +140,8 @@ window.onmousemove = function(e) {
 		modal.style.display = "block";
 		canvasOpen=true;
 		
-		//---
+		//--- Defining graph
+		
 		var chart = new CanvasJS.Chart("chartContainer", {
 			width: 1010,
 			animationEnabled: true,
@@ -155,15 +163,7 @@ window.onmousemove = function(e) {
 				type: "spline",
 				yValueFormatString: "#0.## °C",
 				showInLegend: true,
-				dataPoints: [
-					{ x: new Date(2017,6,24), y: 31 },
-					{ x: new Date(2017,6,25), y: 31 },
-					{ x: new Date(2017,6,26), y: 29 },
-					{ x: new Date(2017,6,27), y: 29 },
-					{ x: new Date(2017,6,28), y: 31 },
-					{ x: new Date(2017,6,29), y: 30 },
-					{ x: new Date(2017,6,30), y: 29 }
-				]
+				dataPoints: chartSensorValues
 			}]
 		});
 		chart.render();
