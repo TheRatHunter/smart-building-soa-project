@@ -3,6 +3,9 @@
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 
+
+var tempSensorsCoords = [];
+
 var img = new Image();
 img.onload = function() {
 	console.log("Drawing image.");
@@ -17,6 +20,7 @@ img.onload = function() {
 		var y = parseInt($("#"+tempSensorsId+"Y:hidden").text());
 		
 		console.log("X : "+x.toString()+", Y : "+y.toString());
+		tempSensorsCoords.push({x: x, y: y, i: i});
 		drawTempSensor(x, y, i);
 		
 	}
@@ -43,11 +47,11 @@ canvas.addEventListener('click', function(evt) {
 }, false);
 
 function drawTempSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(51, 204, 51, 0.8)', 'rgb(20, 82, 20, 0.8)');
+	drawSensor(x, y, nb, 'rgb(51, 204, 51, 1)', 'rgb(20, 82, 20, 1)');
 }
 
 function drawLumSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 26, 0.8)', 'rgb(179, 179, 0, 0.8)');
+	drawSensor(x, y, nb, 'rgb(255, 255, 26, 1)', 'rgb(179, 179, 0, 1)');
 }
 
 function drawSensor(x, y, nb, color1, color2) {
@@ -73,17 +77,56 @@ function drawLegend() {
 	// Title
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "bold 16px Arial";
-	ctx.fillText("Capteurs :", 30, 40); 
+	ctx.fillText("Sensors :", 30, 40); 
 	
 	// Temp sensor
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Température :", 40, 70); 	
+	ctx.fillText("Temperature :", 40, 70); 	
 	drawTempSensor(180, 65, 0);
 	
 	// Lum sensor
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Luminosité :", 40, 125); 
+	ctx.fillText("Luminosity :", 40, 125); 
 	drawLumSensor(180, 120, 0);
 }
+
+
+
+
+
+
+// Element hovering
+canvas.onmousemove = function(e) {
+	
+	// Correct mouse position:
+	var rect = this.getBoundingClientRect();
+	var x = e.clientX - rect.left;
+	var y = e.clientY - rect.top;
+	var i = 0;
+	var r;
+	
+	var toggle = false;
+
+	// Hovering color
+	while(r = tempSensorsCoords[i++]) {
+		if ((x>r.x-20) && (x<(r.x+20)) && (y>r.y-20) && (y<(r.y+20))) {
+			console.log("A");
+			drawLumSensor(r.x, r.y, r.i);
+			toggle = true;
+		} else {
+			console.log("B");
+			drawTempSensor(r.x, r.y, r.i);
+		}
+	}
+
+	// Tooltip management
+	var tooltip = document.getElementById("tooltip");
+	if (toggle) {
+		tooltip.style.display = "block";
+	} else {
+		tooltip.style.display = "none";
+	}
+
+};

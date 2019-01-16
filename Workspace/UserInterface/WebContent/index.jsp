@@ -95,8 +95,13 @@
 		<div id="content-wrapper">
 
 			<div class="container-fluid">
-				<div class="centered">
+				<div class="centered">		
 					<canvas id="myCanvas" width=1000 height="500" style="border:1px solid #0f0c29;"></canvas>
+					<div style="display:none;"  id="tooltip">
+					    <p>
+					       Yo
+					    </p>
+					</div>
 				</div>
 				<div style="display:none;">
 				  <img id="plan" src="img/plan.png"
