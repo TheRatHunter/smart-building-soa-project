@@ -2,6 +2,7 @@
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
+var modal = document.getElementById("myModal");
 
 
 var tempSensorsCoords = [];
@@ -14,8 +15,7 @@ img.onload = function() {
 	console.log("Drawing sensors.");
 	var tempSensorsNb = parseInt($("#tsnb").text());
 	for (var i=0; i<tempSensorsNb; i++) {
-		var tempSensorsId = $("#tsid"+(i.toString())).text();
-		
+		var tempSensorsId = $("#tsid"+(i.toString())).text();		
 		var x = parseInt($("#"+tempSensorsId+"X:hidden").text());
 		var y = parseInt($("#"+tempSensorsId+"Y:hidden").text());
 		
@@ -69,8 +69,6 @@ function drawSensor(x, y, nb, color1, color2) {
 }
 
 function drawLegend() {
-	var c = document.getElementById("myCanvas");
-	var ctx = c.getContext("2d");
 	ctx.fillStyle = 'rgb(0, 0, 0, 0.1)';
 	ctx.fillRect(20, 20, 200, 200); 
 	
@@ -96,12 +94,11 @@ function drawLegend() {
 
 
 
-
 // Element hovering
-canvas.onmousemove = function(e) {
+window.onmousemove = function(e) {	
 	
 	// Correct mouse position:
-	var rect = this.getBoundingClientRect();
+	var rect = canvas.getBoundingClientRect();
 	var x = e.clientX - rect.left;
 	var y = e.clientY - rect.top;
 	var i = 0;
@@ -112,21 +109,25 @@ canvas.onmousemove = function(e) {
 	// Hovering color
 	while(r = tempSensorsCoords[i++]) {
 		if ((x>r.x-20) && (x<(r.x+20)) && (y>r.y-20) && (y<(r.y+20))) {
-			console.log("A");
 			drawLumSensor(r.x, r.y, r.i);
 			toggle = true;
+			
+			var tempSensorsId = $("#tsid"+((i-1).toString())).text();
+			var tempSensorVal = $("#tsval"+tempSensorsId).text();			
+			$("#modal-value").text(tempSensorVal);
+			
 		} else {
-			console.log("B");
 			drawTempSensor(r.x, r.y, r.i);
 		}
 	}
 
-	// Tooltip management
-	var tooltip = document.getElementById("tooltip");
+	// Modal management
 	if (toggle) {
-		tooltip.style.display = "block";
+		modal.style.display = "block";
+		canvasOpen=true;
 	} else {
-		tooltip.style.display = "none";
+		modal.style.display = "none";
 	}
+	
 
 };
