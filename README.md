@@ -27,6 +27,11 @@ To get a value from a sensor
 
 > http://localhost:8080/TemperatureSensors/webapi/sensors/sensor?sensorId=sensorX
 
+To get a sensor's position on the room map : 
+
+> http://localhost:8080/TemperatureSensors/webapi/sensors/coordX?sensorId==sensorX
+> http://localhost:8080/TemperatureSensors/webapi/sensors/coordY?sensorId==sensorX
+
 ### Other APIs...
 
 ## Client
