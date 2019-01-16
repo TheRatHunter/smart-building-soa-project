@@ -47,11 +47,15 @@ canvas.addEventListener('click', function(evt) {
 }, false);
 
 function drawTempSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(51, 204, 51, 1)', 'rgb(20, 82, 20, 1)');
+	drawSensor(x, y, nb, 'rgb(51, 204, 51)', 'rgb(20, 82, 20)');
+}
+
+function drawHoveredSensor(x, y, nb) {
+	drawSensor(x, y, nb, 'rgb(133, 224, 133)', 'rgb(15, 62, 15)');
 }
 
 function drawLumSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 26, 1)', 'rgb(179, 179, 0, 1)');
+	drawSensor(x, y, nb, 'rgb(255, 255, 26)', 'rgb(179, 179, 0)');
 }
 
 function drawSensor(x, y, nb, color1, color2) {
@@ -69,8 +73,7 @@ function drawSensor(x, y, nb, color1, color2) {
 }
 
 function drawLegend() {
-	ctx.fillStyle = 'rgb(0, 0, 0, 0.1)';
-	ctx.fillRect(20, 20, 200, 200); 
+	
 	
 	// Title
 	ctx.fillStyle = 'rgb(0,0,0)';
@@ -80,14 +83,14 @@ function drawLegend() {
 	// Temp sensor
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Temperature :", 40, 70); 	
-	drawTempSensor(180, 65, 0);
+	ctx.fillText("Temperature :", 40, 80); 	
+	drawTempSensor(180, 75, 0);
 	
 	// Lum sensor
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Luminosity :", 40, 125); 
-	drawLumSensor(180, 120, 0);
+	ctx.fillText("Luminosity :", 40, 135); 
+	drawLumSensor(180, 130, 0);
 }
 
 
@@ -109,12 +112,12 @@ window.onmousemove = function(e) {
 	// Hovering color
 	while(r = tempSensorsCoords[i++]) {
 		if ((x>r.x-20) && (x<(r.x+20)) && (y>r.y-20) && (y<(r.y+20))) {
-			drawLumSensor(r.x, r.y, r.i);
+			drawHoveredSensor(r.x, r.y, r.i);
 			toggle = true;
 			
 			var tempSensorsId = $("#tsid"+((i-1).toString())).text();
 			var tempSensorVal = $("#tsval"+tempSensorsId).text();			
-			$("#modal-value").text(tempSensorVal);
+			$("#modal-value").text(tempSensorsId+" : "+tempSensorVal);
 			
 		} else {
 			drawTempSensor(r.x, r.y, r.i);

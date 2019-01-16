@@ -104,7 +104,7 @@
 					
 					  <!-- Modal content -->
 					  <div class="modal-content">
-					    <p>Value : <span id="modal-value"></span></p>
+					    <p><span id="modal-value"></span></p>
 					  </div>
 					
 					</div>
