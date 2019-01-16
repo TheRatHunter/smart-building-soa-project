@@ -118,13 +118,14 @@ window.onmousemove = function(e) {
 			// Compute jQuery requests to gather values
 			var tempSensorsId = $("#tsid"+((i-1).toString())).text();
 			var tempSensorVal = $("#tsval"+tempSensorsId).text();			
-			$("#modal-value").text(tempSensorsId+" : "+tempSensorVal);
+			$("#modal-value-sensor").text(tempSensorsId);		
+			$("#modal-value-value").text(tempSensorVal);
 			
 			var tempSensorNbValues = $("#tsnbpoints"+tempSensorsId).text();
 			for (var i=0; i<tempSensorNbValues; i++) {
 				var tempTimestamp = $("#tspointtime"+tempSensorsId+i.toString()).text();
 				var tempValue = $("#tspointval"+tempSensorsId+i.toString()).text();
-				chartSensorValues.push({x: new Date(tempTimestamp), y: Math.floor(tempValue)});
+				chartSensorValues.push({x: new Date(tempTimestamp), y: Math.round(tempValue)});
 			}
 			
 			// Assign variables values with selected sensor
@@ -150,19 +151,10 @@ window.onmousemove = function(e) {
 				includeZero: false,
 				suffix: " °C"
 			},
-			legend:{
-				cursor: "pointer",
-				fontSize: 16,
-				itemclick: toggleDataSeries
-			},
-			toolTip:{
-				shared: true
-			},
 			data: [{
 				name: chartSensorId,
 				type: "spline",
 				yValueFormatString: "#0.## °C",
-				showInLegend: true,
 				dataPoints: chartSensorValues
 			}]
 		});

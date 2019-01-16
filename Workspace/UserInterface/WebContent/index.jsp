@@ -73,7 +73,7 @@
 										bean = new fr.insa.soa.beans.TemperatureSensorBean();
 										request.setAttribute(attrName, bean);
 									}
-									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <span id=\"tsval%s\">%s</span> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span>", i, bean.getId(), bean.getId(), bean.getValue().substring(0, 4), bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+									out.println(String.format("<li> <span id=\"tsid%s\">%s</span> : <b><span id=\"tsval%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span>", i, bean.getId(), bean.getId(), bean.getValue().substring(0, 4), bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
 									int nbValues = bean.getValues().size();
 									out.println(String.format("<span hidden id=\"tsnbpoints%s\">%s</span>", bean.getId(), Integer.toString(nbValues)));
 									out.println("<ul hidden>");
@@ -112,7 +112,7 @@
 					
 					  <!-- Modal content -->
 					  <div class="modal-content">
-					    <p><span id="modal-value"></span></p><br/>
+					    <p><span id="modal-value-sensor"></span> : <b><span id="modal-value-value"></span></b></p><br/>
 					    <div id="chartContainer" style=""></div>
 					  </div>
 					
