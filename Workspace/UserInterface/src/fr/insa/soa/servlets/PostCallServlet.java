@@ -13,6 +13,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 
 /**
@@ -34,8 +35,11 @@ public class PostCallServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-    	String decodedQueryString = URLDecoder.decode(request.getQueryString(), "UTF-8");
+		// Prevent JavaSript Ajax error
+		response.setHeader(HttpHeaders.CONTENT_TYPE, "text/plain");
+    	
+		// Extract query parameters
+		String decodedQueryString = URLDecoder.decode(request.getQueryString(), "UTF-8");
 		String[] args = decodedQueryString.split("&");
 		ArrayList<String> queryNames = new ArrayList<String>();
 		ArrayList<String> queryValues = new ArrayList<String>();
@@ -46,12 +50,13 @@ public class PostCallServlet extends HttpServlet {
 			queryNames.add(queryName);
 			queryValues.add(queryValue);
 		}
+		
+		// Formulate PUT request to API
 		if (queryNames.get(0).contains("heater")) {
-			System.out.println("Heater request detected. preparing the following PUT :");
 			String putURI = "http://localhost:8080/Heaters/webapi/heaters/heater/"+queryValues.get(0)+"/"+queryValues.get(1);
-			System.out.println(putURI);
 			restApiPut(putURI);
 		}
+		
     	response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 

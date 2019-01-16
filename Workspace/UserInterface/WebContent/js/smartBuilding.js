@@ -29,10 +29,14 @@ function updateHeater(element)
 		if (element.checked) {
 			if(element.attributes.id.nodeValue === ("checkboxheater"+i.toString())) {
 				console.log("Sending status on for heater"+i.toString());
+				// Ajax call to servlet that will send put to API
 				$.get("PostCallServlet?heaterId=heater"+i.toString()+"&state=true", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
                     $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
                 });
+				// Update span text
 				$("#hvalheater"+i.toString()).text("ON");
+				// Update span class
+				$("#hvalheater"+i.toString()).addClass('statusON').removeClass('statusOFF');
 			}
 		} else {
 			if(element.attributes.id.nodeValue === ("checkboxheater"+i.toString())) {
@@ -41,6 +45,7 @@ function updateHeater(element)
                     $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
                 });
 				$("#hvalheater"+i.toString()).text("OFF");
+				$("#hvalheater"+i.toString()).addClass('statusOFF').removeClass('statusON');
 			}
 		}
 	}
