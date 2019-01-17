@@ -1,13 +1,10 @@
 package fr.insa.soa.beans;
 
-
-
-public class HeaterBean {
+public class WindowBean {
 	private String id;
 	private boolean status;
 	private Integer mapCoordX;
 	private Integer mapCoordY;
-	
 	public String getId() {
 		return id;
 	}
