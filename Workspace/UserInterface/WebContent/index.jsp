@@ -49,6 +49,8 @@
 			<li class="nav-item"><a class="nav-link" href="">
 					<i class="fas fa-thermometer-half"></i> <span>&nbsp;&nbsp;Temperature</span>
 			</a></li>
+			
+			
 			<li>
 				<div class="shadow">
 					<div class="container">
@@ -84,7 +86,7 @@
 			<li>
 				<div class="shadow">
 					<div class="container">
-						<p class="sidebar-element-title">Actuators</p>
+						<p class="sidebar-element-title">Heaters</p>
 							
 						<ul>
 							<%
@@ -112,6 +114,10 @@
 					</div>
 				</div>
 			</li>
+			
+			<li class="nav-item"><a class="nav-link" href="">
+					<i class="fas fa-door-open"></i> <span>&nbsp;&nbsp;Room status</span>
+			</a></li>
 			
 			<li>
 				<div class="shadow">

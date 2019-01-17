@@ -1,4 +1,4 @@
-setTimeout("window.location.reload()",5000);
+setTimeout("window.location.reload()",10000);
 
 // Page element retrieving
 var canvas = document.getElementById("myCanvas");
@@ -177,6 +177,7 @@ img.onload = function() {
 
 	// Legend drawing
 	drawLegend();
+	//drawAlarms();
 };
 img.src = "img/plan.png";50
 
@@ -343,8 +344,18 @@ function drawHoveredTemperatureSensor(x, y, nb) {
 	drawSensor(x, y, nb, 'rgb(20, 82, 20)', 'rgb(20, 82, 20)');
 }
 
-function drawLumSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(179, 179, 0)');
+function drawAlarm(x, y) {
+	ctx.beginPath();
+	ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
+	ctx.fillStyle = "rgb(200, 0, 0)"; 
+	ctx.fill();
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = "rgb(70, 0, 0)";
+	ctx.stroke();
+
+	ctx.fillStyle = "rgb(70, 0, 0)";
+	ctx.font = "bold 16px Arial";
+	ctx.fillText("!!", x-5, y+6); 
 }
 
 function drawSensor(x, y, nb, color1, color2) {
@@ -362,27 +373,27 @@ function drawSensor(x, y, nb, color1, color2) {
 }
 
 function drawHoveredHeater(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(128, 0, 0)', 'rgb(128, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(255, 0, 0)', 'rgb(255, 0, 0)');
 }
 
 function drawHeaterOff(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(77, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(102, 0, 0)');
 }
 
 function drawHeaterOn(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(200, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(255, 0, 0)');
 }
 
 function drawHoveredWindow(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(50, 40, 138)', 'rgb(50, 40, 138)');
+	drawActuator(x, y, nb, 'rgb(0, 102, 255)', 'rgb(0, 102, 255)');
 }
 
 function drawWindowClosed(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(50, 40, 138)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(0, 20, 51)');
 }
 
 function drawWindowOpen(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(29, 23, 79)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(0, 102, 255)');
 }
 
 function drawActuator(x, y, nb, color1, color2) {
@@ -406,31 +417,45 @@ function drawLegend() {
 	// Title
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "bold 16px Arial";
-	ctx.fillText("Sensors :", 30, 40); 
+	ctx.fillText("Sensors :", 30, 60); 
 	
 	// Temp sensor
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Temperature :", 40, 80); 	
-	drawTempSensor(180, 75, 0);
-	
-	// Lum sensor
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "16px Arial";
-	ctx.fillText("Luminosity :", 40, 135); 
-	drawLumSensor(180, 130, 0);
+	ctx.fillText("Temperature :", 40, 100); 	
+	drawTempSensor(180, 95, 0);
 	
 	// Title
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "bold 16px Arial";
-	ctx.fillText("Actuators :", 30, 185); 
+	ctx.fillText("Actuators :", 30, 145); 
 	
 	// Heater 
 	ctx.fillStyle = 'rgb(0,0,0)';
 	ctx.font = "16px Arial";
-	ctx.fillText("Heaters:", 40, 225); 
-	ctx.fillText("OFF :", 50, 255); 
-	ctx.fillText("ON :", 50, 310); 
-	drawHeaterOff(180, 250, 0);
-	drawHeaterOn(180, 305, 0);
+	ctx.fillText("Heaters:", 40, 185); 
+	ctx.fillText("OFF :", 50, 215); 
+	ctx.fillText("ON :", 50, 270); 
+	drawHeaterOff(180, 210, 0);
+	drawHeaterOn(180, 275, 0);
+	
+	//Windows
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "16px Arial";
+	ctx.fillText("Windows:", 40, 320); 
+	ctx.fillText("CLOSED :", 50, 355); 
+	ctx.fillText("OPEN :", 50, 415); 
+	drawWindowClosed(180, 350, 0);
+	drawWindowOpen(180, 410, 0);
+}
+
+
+
+function drawAlarms() {		
+	// Title
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "bold 16px Arial";
+	ctx.fillText("Alarms :", 800, 60); 
+	
+	drawAlarm(800, 100);
 }

@@ -12,7 +12,7 @@ public class WindowsSystem {
 		super();
 		this.windows = new HashMap<String, Window>();
 		windows.putIfAbsent("window0", new Window(0, 393, 80));
-		windows.putIfAbsent("window1", new Window(1, 576, 20));
+		windows.putIfAbsent("window1", new Window(1, 576, 25));
 		windows.putIfAbsent("window2", new Window(2, 705, 403));
 		// Turn on heater one
 		windows.get("window1").setStatus(true);
