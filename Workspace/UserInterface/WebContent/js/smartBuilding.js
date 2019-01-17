@@ -143,7 +143,7 @@ window.onmousemove = function(e) {
 	// Hovering color (Temperature sensors)
 	while(r = tempSensorsCoords[i++]) {
 		if ((x>r.x-20) && (x<(r.x+20)) && (y>r.y-20) && (y<(r.y+20))) {
-			drawHoveredSensor(r.x, r.y, r.i);
+			drawHoveredTemperatureSensor(r.x, r.y, r.i);
 			toggle = true;
 			
 			// Compute jQuery requests to gather values
@@ -244,8 +244,8 @@ function drawTempSensor(x, y, nb) {
 	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(20, 82, 20)');
 }
 
-function drawHoveredSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(133, 224, 133)', 'rgb(15, 62, 15)');
+function drawHoveredTemperatureSensor(x, y, nb) {
+	drawSensor(x, y, nb, 'rgb(20, 82, 20)', 'rgb(20, 82, 20)');
 }
 
 function drawLumSensor(x, y, nb) {
@@ -267,15 +267,15 @@ function drawSensor(x, y, nb, color1, color2) {
 }
 
 function drawHoveredHeater(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(102, 0, 0)', 'rgb(128, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(128, 0, 0)', 'rgb(128, 0, 0)');
 }
 
 function drawHeaterOff(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 51, 51)', 'rgb(128, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(77, 0, 0)');
 }
 
 function drawHeaterOn(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(128, 0, 0)');
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(200, 0, 0)');
 }
 
 function drawActuator(x, y, nb, color1, color2) {
@@ -294,8 +294,7 @@ function drawActuator(x, y, nb, color1, color2) {
 	ctx.fillText(nb.toString(), x-4, y+6); 
 }
 
-function drawLegend() {
-	
+function drawLegend() {	
 	
 	// Title
 	ctx.fillStyle = 'rgb(0,0,0)';
