@@ -1,4 +1,4 @@
-//setTimeout("window.location.reload()",3000);
+//setTimeout("window.location.reload()",10000);
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
