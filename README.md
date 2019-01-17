@@ -9,14 +9,14 @@ After downloading the project, extract it in your workplace and import it in Ecl
 At this point you may encounter some configuration problem:
 
 - Make sure you have at least you have JDK 1.7 and version 7 of TOMCAT web container
-- If you have the error ```"The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path"``` in one of the services --> Include  ```servlet-api-3.1.jar``` in your dependencies on ```TemperatureSensor/pom.xml```, ```Heaters/pom.xml``` and ```Windows/pom.xml``` by adding this lines :
+- If you have the error ```"The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path"``` in one of the services --> Include  ```servlet-api-3.1.jar``` in your dependencies on ```TemperatureSensor/pom.xml```, ```Heaters/pom.xml``` and ```Windows/pom.xml``` by adding these lines :
 
-> <dependency>
->  <groupId>javax.servlet</groupId>
->     <artifactId>javax.servlet-api</artifactId>
->     <version>3.1.0</version>
->     <scope>provided</scope>
-> </dependency>
+```<dependency>
+ <groupId>javax.servlet</groupId>
+    <artifactId>javax.servlet-api</artifactId>
+    <version>3.1.0</version>
+    <scope>provided</scope>
+</dependency>```
  
 - Try then ```ALT+F5``` and force Updates of ```Snapshots/Releases``` on all the available Maven codebases.
  
