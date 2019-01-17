@@ -2,12 +2,14 @@ package fr.insa.soa.smartBuilding;
 
 import java.util.Set;
 
+import javax.inject.Singleton;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+@Singleton
 @Path("sensors")
 public class TemperatureSensorsSystemResource {
 	

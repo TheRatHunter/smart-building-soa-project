@@ -22,6 +22,19 @@ function updateCheckboxes()
 			$("#checkboxheater"+i.toString()).prop('checked', false);
 		}
 	}
+	
+	// Redraw heaters
+	var heatersNb = parseInt($("#hnb").text());
+	for (var i=0; i<heatersNb; i++) {
+		var heatersId = $("#hid"+(i.toString())).text();		
+		var x = parseInt($("#"+heatersId+"X").text());
+		var y = parseInt($("#"+heatersId+"Y").text());
+		if ($("#hvalheater"+i.toString()).text()==="OFF") {
+			drawHeaterOff(x, y, i);
+		} else {
+			drawHeaterOn(x, y, i);				
+		}	
+	}
 }
 updateCheckboxes();
 
@@ -82,7 +95,12 @@ img.onload = function() {
 		var y = parseInt($("#"+heatersId+"Y").text());
 		
 		heatersCoords.push({x: x, y: y, i: i});
-		drawHeaterOn(x, y, i);		
+		
+		if ($("#hvalheater"+i.toString()).text()==="OFF") {
+			drawHeaterOff(x, y, i);
+		} else {
+			drawHeaterOn(x, y, i);				
+		}	
 	}
 
 	// Legend drawing
@@ -165,7 +183,11 @@ window.onmousemove = function(e) {
 			$("#modal-value-actuator").text(heaterId);		
 			$("#modal-value-status").text(heaterVal);
 		} else {
-			drawHeaterOn(s.x, s.y, s.i);
+			if ($("#hvalheater"+(i-1).toString()).text()==="OFF") {
+				drawHeaterOff(s.x, s.y, s.i);
+			} else {
+				drawHeaterOn(s.x, s.y, s.i);				
+			}
 		}
 	}
 
