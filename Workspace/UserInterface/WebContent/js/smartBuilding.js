@@ -1,11 +1,12 @@
 //setTimeout("window.location.reload()",10000);
 
+// Page element retrieving
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
 var modal = document.getElementById("myModal");
 var modal2 = document.getElementById("myModalNoGraph");
 
-
+// Devices coordinates
 var tempSensorsCoords = [];
 var heatersCoords = [];
 
@@ -24,6 +25,7 @@ function updateCheckboxes()
 }
 updateCheckboxes();
 
+// Update heater status on checkbox click
 function updateHeater(element)
 {
 	var nbHeaters = parseInt($("#hnb").text());
@@ -51,14 +53,17 @@ function updateHeater(element)
 			}
 		}
 	}
-	updateCheckboxes();
-  
+	updateCheckboxes();  
 }
 	
+
+// Draw Image in canvas
 var img = new Image();
 img.onload = function() {
+	// Image drawing
 	ctx.drawImage(img, 0, 0);
 
+	// Temperature sensors drawing
 	var tempSensorsNb = parseInt($("#tsnb").text());
 	for (var i=0; i<tempSensorsNb; i++) {
 		var tempSensorsId = $("#tsid"+(i.toString())).text();		
@@ -69,6 +74,7 @@ img.onload = function() {
 		drawTempSensor(x, y, i);		
 	}
 	
+	// Heaters drawing
 	var heatersNb = parseInt($("#hnb").text());
 	for (var i=0; i<heatersNb; i++) {
 		var heatersId = $("#hid"+(i.toString())).text();		
@@ -79,12 +85,12 @@ img.onload = function() {
 		drawHeaterOn(x, y, i);		
 	}
 
+	// Legend drawing
 	drawLegend();
 };
 img.src = "img/plan.png";50
 
-// Mouse event
-
+// Mouse click management
 function getMousePos(canvas, evt) {
 	var rect = canvas.getBoundingClientRect();
 	return {
@@ -92,107 +98,14 @@ function getMousePos(canvas, evt) {
 		y : evt.clientY - rect.top
 	};
 }
-
 canvas.addEventListener('click', function(evt) {
 	var mousePos = getMousePos(canvas, evt);
 	var message = 'Mouse position: ' + mousePos.x + ',' + mousePos.y;
 	console.log(message);
 }, false);
 
-function drawTempSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(20, 82, 20)');
-}
 
-function drawHoveredSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(133, 224, 133)', 'rgb(15, 62, 15)');
-}
-
-function drawLumSensor(x, y, nb) {
-	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(179, 179, 0)');
-}
-
-function drawSensor(x, y, nb, color1, color2) {
-	ctx.beginPath();
-	ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
-	ctx.fillStyle = color1; 
-	ctx.fill();
-	ctx.lineWidth = 5;
-	ctx.strokeStyle = color2;
-	ctx.stroke();
-
-	ctx.fillStyle = color2;
-	ctx.font = "16px Arial";
-	ctx.fillText(nb.toString(), x-4, y+6); 
-}
-
-function drawHoveredHeater(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(102, 0, 0)', 'rgb(128, 0, 0)');
-}
-
-function drawHeaterOff(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 51, 51)', 'rgb(128, 0, 0)');
-}
-
-function drawHeaterOn(x, y, nb) {
-	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(128, 0, 0)');
-}
-
-function drawActuator(x, y, nb, color1, color2) {
-	ctx.fillStyle = color1 ;
-	ctx.fillRect(x-18, y-18, 36, 36);
-	
-	ctx.beginPath();
-	ctx.lineWidth = 5;
-	ctx.strokeStyle = color2;
-	ctx.rect(x-18, y-18, 36, 36);
-	ctx.stroke();
-	
-
-	ctx.fillStyle = color2;
-	ctx.font = "16px Arial";
-	ctx.fillText(nb.toString(), x-4, y+6); 
-}
-
-function drawLegend() {
-	
-	
-	// Title
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "bold 16px Arial";
-	ctx.fillText("Sensors :", 30, 40); 
-	
-	// Temp sensor
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "16px Arial";
-	ctx.fillText("Temperature :", 40, 80); 	
-	drawTempSensor(180, 75, 0);
-	
-	// Lum sensor
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "16px Arial";
-	ctx.fillText("Luminosity :", 40, 135); 
-	drawLumSensor(180, 130, 0);
-	
-	// Title
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "bold 16px Arial";
-	ctx.fillText("Actuators :", 30, 185); 
-	
-	// Heater 
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "16px Arial";
-	ctx.fillText("Heaters:", 40, 225); 
-	ctx.fillText("OFF :", 50, 255); 
-	ctx.fillText("ON :", 50, 310); 
-	drawHeaterOff(180, 250, 0);
-	drawHeaterOn(180, 305, 0);
-}
-
-
-
-
-
-// Element hovering
+// Element hovering management
 window.onmousemove = function(e) {	
 	
 	// Correct mouse position:
@@ -300,6 +213,96 @@ window.onmousemove = function(e) {
 	} else {
 		modal2.style.display = "none";		
 	}
+};
+
+
+/* ------------ Functions to draw stuff in the canvas ------------- */
+
+function drawTempSensor(x, y, nb) {
+	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(20, 82, 20)');
+}
+
+function drawHoveredSensor(x, y, nb) {
+	drawSensor(x, y, nb, 'rgb(133, 224, 133)', 'rgb(15, 62, 15)');
+}
+
+function drawLumSensor(x, y, nb) {
+	drawSensor(x, y, nb, 'rgb(255, 255, 255)', 'rgb(179, 179, 0)');
+}
+
+function drawSensor(x, y, nb, color1, color2) {
+	ctx.beginPath();
+	ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
+	ctx.fillStyle = color1; 
+	ctx.fill();
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = color2;
+	ctx.stroke();
+
+	ctx.fillStyle = color2;
+	ctx.font = "16px Arial";
+	ctx.fillText(nb.toString(), x-4, y+6); 
+}
+
+function drawHoveredHeater(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(102, 0, 0)', 'rgb(128, 0, 0)');
+}
+
+function drawHeaterOff(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 51, 51)', 'rgb(128, 0, 0)');
+}
+
+function drawHeaterOn(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(128, 0, 0)');
+}
+
+function drawActuator(x, y, nb, color1, color2) {
+	ctx.fillStyle = color1 ;
+	ctx.fillRect(x-18, y-18, 36, 36);
+	
+	ctx.beginPath();
+	ctx.lineWidth = 5;
+	ctx.strokeStyle = color2;
+	ctx.rect(x-18, y-18, 36, 36);
+	ctx.stroke();
 	
 
-};
+	ctx.fillStyle = color2;
+	ctx.font = "16px Arial";
+	ctx.fillText(nb.toString(), x-4, y+6); 
+}
+
+function drawLegend() {
+	
+	
+	// Title
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "bold 16px Arial";
+	ctx.fillText("Sensors :", 30, 40); 
+	
+	// Temp sensor
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "16px Arial";
+	ctx.fillText("Temperature :", 40, 80); 	
+	drawTempSensor(180, 75, 0);
+	
+	// Lum sensor
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "16px Arial";
+	ctx.fillText("Luminosity :", 40, 135); 
+	drawLumSensor(180, 130, 0);
+	
+	// Title
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "bold 16px Arial";
+	ctx.fillText("Actuators :", 30, 185); 
+	
+	// Heater 
+	ctx.fillStyle = 'rgb(0,0,0)';
+	ctx.font = "16px Arial";
+	ctx.fillText("Heaters:", 40, 225); 
+	ctx.fillText("OFF :", 50, 255); 
+	ctx.fillText("ON :", 50, 310); 
+	drawHeaterOff(180, 250, 0);
+	drawHeaterOn(180, 305, 0);
+}
