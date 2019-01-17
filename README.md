@@ -5,7 +5,25 @@ Use of a Service Oriented Architecture in order do develop a Smart Building Appl
 
 ### Project import
 
-With eclipse.
+After downloading the project, extract it in your workplace and import it in Eclipse JAVA-EE.
+At this point you may encounter some configuration problem:
+
+- Make sure you have at least you have JDK 1.7 and version 7 of TOMCAT web container
+- If you have the error ```"The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path"``` in one of the services --> Include  ```servlet-api-3.1.jar``` in your dependencies on ```TemperatureSensor/pom.xml```, ```Heaters/pom.xml``` and ```Windows/pom.xml``` by adding this lines :
+
+> <dependency>
+>  <groupId>javax.servlet</groupId>
+>     <artifactId>javax.servlet-api</artifactId>
+>     <version>3.1.0</version>
+>     <scope>provided</scope>
+> </dependency>
+ 
+- Try then ```ALT+F5``` and force Updates of ```Snapshots/Releases``` on all the available Maven codebases.
+ 
+- If you have the problem ```"Multiple annotations found at this line:- Integer cannot be resolved to a type- The method getAttribute(String) from the type ServletRequest refers to the missing type Object"``` on the JSP under UserInterface --> it's a  problem of a missing Build path ! To solve this : Right click on UserInteface then Properties go to the JAVA Build path and check the Libraries, remove the JRE System Library the Re-add it.
+ 
+*Bingo !! The project is yours!!!*
+
 
 ### Tomcat RAM usage 
 
