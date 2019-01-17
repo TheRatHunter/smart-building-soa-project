@@ -56,6 +56,10 @@ public class PostCallServlet extends HttpServlet {
 			String putURI = "http://localhost:8080/Heaters/webapi/heaters/heater/"+queryValues.get(0)+"/"+queryValues.get(1);
 			restApiPut(putURI);
 		}
+		if (queryNames.get(0).contains("window")) {
+			String putURI = "http://localhost:8080/Windows/webapi/windows/window/"+queryValues.get(0)+"/"+queryValues.get(1);
+			restApiPut(putURI);
+		}
 		
     	response.getWriter().append("Served at: ").append(request.getContextPath());
 	}

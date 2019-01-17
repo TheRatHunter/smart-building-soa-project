@@ -9,11 +9,13 @@ var modal2 = document.getElementById("myModalNoGraph");
 // Devices coordinates
 var tempSensorsCoords = [];
 var heatersCoords = [];
+var windowsCoords = [];
 
 
 //Update checkboxes
 function updateCheckboxes()
 {
+	// Toggle heater checkbox
 	var nbHeaters = parseInt($("#hnb").text());
 	for (var i=0; i<nbHeaters; i++) {
 		if ($("#hvalheater"+i.toString()).text()==="ON") {
@@ -35,8 +37,31 @@ function updateCheckboxes()
 			drawHeaterOn(x, y, i);				
 		}	
 	}
+	
+	// Toggle window checkbox
+	var nbWindows = parseInt($("#wnb").text());
+	for (var i=0; i<nbWindows; i++) {
+		if ($("#wvalwindow"+i.toString()).text()==="OPEN") {
+			$("#checkboxwindow"+i.toString()).prop('checked', true);
+		} else {
+			$("#checkboxwindow"+i.toString()).prop('checked', false);
+		}
+	}
+	
+	// Redraw windows
+	var windowsNb = parseInt($("#wnb").text());
+	for (var i=0; i<windowsNb; i++) {
+		var windowsId = $("#wid"+(i.toString())).text();		
+		var x = parseInt($("#"+windowsId+"X").text());
+		var y = parseInt($("#"+windowsId+"Y").text());
+		if ($("#wvalwindow"+i.toString()).text()==="CLOSED") {
+			drawWindowClosed(x, y, i);
+		} else {
+			drawWindowOpen(x, y, i);				
+		}	
+	}
 }
-updateCheckboxes();
+updateCheckboxes(); /////
 
 // Update heater status on checkbox click
 function updateHeater(element)
@@ -63,6 +88,37 @@ function updateHeater(element)
                 });
 				$("#hvalheater"+i.toString()).text("OFF");
 				$("#hvalheater"+i.toString()).addClass('statusOFF').removeClass('statusON');
+			}
+		}
+	}
+	updateCheckboxes();  
+}
+
+//Update window status on checkbox click
+function updateWindow(element)
+{
+	var nbWindows = parseInt($("#wnb").text());
+	for (var i=0; i<nbWindows; i++) {
+		if (element.checked) {
+			if(element.attributes.id.nodeValue === ("checkboxwindow"+i.toString())) {
+				console.log("Sending status on for window"+i.toString());
+				// Ajax call to servlet that will send put to API
+				$.get("PostCallServlet?windowId=window"+i.toString()+"&state=true", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+				// Update span text
+				$("#wvalwindow"+i.toString()).text("OPEN");
+				// Update span class
+				$("#wvalwindow"+i.toString()).addClass('statusOPEN').removeClass('statusCLOSED');
+			}
+		} else {
+			if(element.attributes.id.nodeValue === ("checkboxwindow"+i.toString())) {
+				console.log("Sending status off for window"+i.toString());
+				$.get("PostCallServlet?windowId=window"+i.toString()+"&state=false", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+                    $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+                });
+				$("#wvalwindow"+i.toString()).text("CLOSED");
+				$("#wvalwindow"+i.toString()).addClass('statusCLOSED').removeClass('statusOPEN');
 			}
 		}
 	}
@@ -100,6 +156,22 @@ img.onload = function() {
 			drawHeaterOff(x, y, i);
 		} else {
 			drawHeaterOn(x, y, i);				
+		}	
+	}
+	
+	// Windows drawing
+	var windowsNb = parseInt($("#wnb").text());
+	for (var i=0; i<windowsNb; i++) {
+		var windowsId = $("#wid"+(i.toString())).text();		
+		var x = parseInt($("#"+windowsId+"X").text());
+		var y = parseInt($("#"+windowsId+"Y").text());
+		
+		windowsCoords.push({x: x, y: y, i: i});
+		
+		if ($("#wvalwindow"+i.toString()).text()==="CLOSED") {
+			drawWindowClosed(x, y, i);
+		} else {
+			drawWindowOpen(x, y, i);				
 		}	
 	}
 
@@ -190,6 +262,29 @@ window.onmousemove = function(e) {
 			}
 		}
 	}
+	
+	var s;
+	i=0;
+	
+	// Hovering color (windows)
+	while(s = windowsCoords[i++]) {
+		if ((x>s.x-18) && (x<(s.x+18)) && (y>s.y-18) && (y<(s.y+18))) {
+			drawHoveredWindow(s.x, s.y, s.i);
+			toggle2 = true;
+			
+			// Compute jQuery requests to gather values
+			var windowId = $("#wid"+((i-1).toString())).text();
+			var windowVal = $("#wval"+windowId).text();			
+			$("#modal-value-actuator").text(windowId);		
+			$("#modal-value-status").text(windowVal);
+		} else {
+			if ($("#wvalwindow"+(i-1).toString()).text()==="CLOSED") {
+				drawWindowClosed(s.x, s.y, s.i);
+			} else {
+				drawWindowOpen(s.x, s.y, s.i);				
+			}
+		}
+	}
 
 	// Modal management
 	if (toggle) {
@@ -276,6 +371,18 @@ function drawHeaterOff(x, y, nb) {
 
 function drawHeaterOn(x, y, nb) {
 	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(200, 0, 0)');
+}
+
+function drawHoveredWindow(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(50, 40, 138)', 'rgb(50, 40, 138)');
+}
+
+function drawWindowClosed(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(50, 40, 138)');
+}
+
+function drawWindowOpen(x, y, nb) {
+	drawActuator(x, y, nb, 'rgb(255, 255, 255)', 'rgb(29, 23, 79)');
 }
 
 function drawActuator(x, y, nb, color1, color2) {
