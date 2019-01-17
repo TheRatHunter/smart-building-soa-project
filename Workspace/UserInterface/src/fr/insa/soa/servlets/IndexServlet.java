@@ -69,9 +69,6 @@ public class IndexServlet extends HttpServlet {
 		return restResponse.readEntity(String.class);
 	}
 	
-	/**
-     * Perform GET request at provided url and returns result as Integer
-     */
 	
 	/**
      * Perform GET request at provided url and returns result as ArrayList<String>

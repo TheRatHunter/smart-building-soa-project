@@ -77,6 +77,13 @@ input:checked + .slider:before {
 .statusON{
 	color: green;
 }
+
+.statusCLOSED{
+	color: red;
+}
+.statusOPEN{
+	color: green;
+}
  
 .modal {
   display: none; /* Hidden by default */
