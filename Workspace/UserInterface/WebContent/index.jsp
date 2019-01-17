@@ -113,6 +113,38 @@
 				</div>
 			</li>
 			
+			<li>
+				<div class="shadow">
+					<div class="container">
+						<p class="sidebar-element-title">Windows</p>
+							
+						<ul>
+							<%
+							Integer numberOfWindows = (Integer) request.getAttribute("numberOfWindows");
+							out.println(String.format("<li hidden><span id=\"wnb\">%s</span></li>",Integer.toString(numberOfWindows)));
+							for (int i = 0; i < numberOfWindows; i++) {
+									String attrName = "w" + Integer.toString(i);
+									fr.insa.soa.beans.WindowBean bean = (fr.insa.soa.beans.WindowBean) request
+											.getAttribute(attrName);
+									if (bean == null) {
+										bean = new fr.insa.soa.beans.WindowBean();
+										request.setAttribute(attrName, bean);
+									}
+									String status = bean.getStatus() ? "OPEN" : "CLOSED";
+									out.println(String.format("<li> <span id=\"wid%s\">%s</span> : <b><span id=\"wval%s\" class=\"status%s\">%s</span></b> <span hidden id=\"%sX\">%d</span> <span hidden id=\"%sY\">%d</span><br/>", i, bean.getId(), bean.getId(), status, status, bean.getId(), bean.getMapCoordX(), bean.getId(), bean.getMapCoordY()));
+									String checkProperty = bean.getStatus() ? "checked" : "";
+									out.println("<label class=\"switch\">");
+									out.println(String.format("<input onchange=\"updateWindow(this);\" id=\"checkboxwindow%d\" type=\"checkbox\" %s>", i, checkProperty));
+									out.println("<span class=\"slider round\"></span>");
+									out.println("</label>");
+									out.println("</li>");
+							}
+							%>
+						</ul>
+					</div>
+				</div>
+			</li>
+			
 		</ul>
 
 		<div id="content-wrapper">

@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import fr.insa.soa.beans.HeaterBean;
 import fr.insa.soa.beans.TemperatureSensorBean;
+import fr.insa.soa.beans.WindowBean;
 
 /**
  * Servlet implementation class IndexServlet
@@ -26,6 +27,7 @@ public class IndexServlet extends HttpServlet {
 	// Bean containers definitions
 	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans;
 	private HashMap<String, HeaterBean> heaterBeans;
+	private HashMap<String, WindowBean> windowBeans;
        
     /**
      * Constructor
@@ -35,6 +37,7 @@ public class IndexServlet extends HttpServlet {
         // Bean containers creation
         temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
         heaterBeans = new HashMap<String, HeaterBean>();
+        windowBeans = new HashMap<String, WindowBean>();
     }
 
     /**
@@ -44,6 +47,7 @@ public class IndexServlet extends HttpServlet {
 
 		request = aggregateTemperatureSensorsData(request);
 		request = aggregateHeatersData(request);
+		request = aggregateWindowsData(request);
 		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
 
 	}
@@ -161,6 +165,50 @@ public class IndexServlet extends HttpServlet {
 		int i=0;
 		for (HeaterBean bean : beans) {
 			request.setAttribute("h"+Integer.toString(i), bean);
+			i++;
+		}	
+		
+		return request;
+		
+	}
+	
+	
+	/**
+	 * Aggregates the windows attributes to the request
+	 * @param  request  The request to process
+	 * @return 			The processed request
+	 */
+	private HttpServletRequest aggregateWindowsData(HttpServletRequest request) {
+		
+		ArrayList<String> windowNames = restApiGetArray("http://localhost:8080/Windows/webapi/windows");
+		
+		for (String windowName : windowNames) {
+			// Initialize entry with new bean if absent
+			WindowBean newBean = new WindowBean();
+			newBean.setId(windowName);
+			windowBeans.putIfAbsent(windowName, newBean);			
+			// Get heater status
+			String status = restApiGet("http://localhost:8080/Windows/webapi/windows/window?windowId="+windowName);			
+			// Add last value to bean
+			windowBeans.get(windowName).setStatus(status.equals("true"));
+			// Get coordinates values
+			Integer x = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Windows/webapi/windows/coordX?windowId="+windowName)));
+			Integer y = Math.round(Float.parseFloat(restApiGet("http://localhost:8080/Windows/webapi/windows/coordY?windowId="+windowName)));
+			windowBeans.get(windowName).setMapCoordX(x);
+			windowBeans.get(windowName).setMapCoordY(y);
+		}	
+		
+		// Pass number of heaters as attribute
+		request.setAttribute("numberOfWindows", windowBeans.size() );			
+		
+		// Extract list of heaters and sort it by id
+		ArrayList<WindowBean> beans = new ArrayList<WindowBean>(windowBeans.values());
+		beans.sort((WindowBean o1, WindowBean o2) -> o1.getId().compareTo(o2.getId()));
+		
+		// Pass heater bean of each heater as attribute
+		int i=0;
+		for (WindowBean bean : beans) {
+			request.setAttribute("w"+Integer.toString(i), bean);
 			i++;
 		}	
 		
