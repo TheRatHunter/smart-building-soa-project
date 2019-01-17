@@ -1,4 +1,4 @@
-//setTimeout("window.location.reload()",10000);
+setTimeout("window.location.reload()",5000);
 
 // Page element retrieving
 var canvas = document.getElementById("myCanvas");

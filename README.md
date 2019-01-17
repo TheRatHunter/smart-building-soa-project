@@ -53,6 +53,25 @@ To get a heater's potition on the room map (GET) :
 
 > http://localhost:8080/Heaters/webapi/heaters/coordY?heaterId=heaterX
 
+### Windows REST API
+
+To get a table of all available windows :
+
+> http://localhost:8080/Windows/webapi/windows
+
+To get the status of a window (GET) :
+
+> http://localhost:8080/Windows/webapi/windows/window?windowId=windowX
+
+To set the status of a window (PUT) :
+
+> http://localhost:8080/Windows/webapi/windows/window/windowX/true
+
+To get a window's potition on the room map (GET) :
+
+> http://localhost:8080/Windows/webapi/windows/coordX?windowId=windowX
+
+> http://localhost:8080/Windows/webapi/windows/coordY?windowId=windowX
 
 
 ## Client
