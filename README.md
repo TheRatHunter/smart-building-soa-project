@@ -1,6 +1,10 @@
 # smart-building-soa-project
 Use of a Service Oriented Architecture in order do develop a Smart Building Application.
 
+![Interface view 1](./screen1.png)
+
+![Interface view 2](./screen2.png)
+
 ## Setup
 
 ### Project import
