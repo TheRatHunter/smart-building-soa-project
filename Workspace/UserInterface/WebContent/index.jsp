@@ -151,7 +151,29 @@
 				</div>
 			</li>
 			
+			<%
+		Integer numberOfAlarms = (Integer) request.getAttribute("numberOfAlarms");
+		out.println(String.format("<li hidden><span id=\"anb\">%s</span>",Integer.toString(numberOfAlarms)));
+		for (int i = 0; i < numberOfAlarms; i++) {
+				String attrName = "a" + Integer.toString(i);
+				fr.insa.soa.beans.AlarmBean bean = (fr.insa.soa.beans.AlarmBean) request
+						.getAttribute(attrName);
+				if (bean == null) {
+					bean = new fr.insa.soa.beans.AlarmBean();
+					request.setAttribute(attrName, bean);
+				}
+				String alHigh = bean.isTemperatureHighAlarm() ? "ON" : "OFF";
+				String alLow = bean.isTemperatureLowAlarm() ? "ON" : "OFF";
+				String alBothOn = bean.isHeaterWindowBothOnAlarm()? "ON" : "OFF";
+				out.println(String.format("<span id=\"al%dhigh=\" hidden>%s</span><span id=\"al%dlow=\" hidden>%s</span><span id=\"al%dboth=\" hidden>%s</span>", i, alHigh, i, alLow, i, alBothOn));
+				
+		}
+		out.println("</li>");
+		%>
+			
 		</ul>
+		
+		
 
 		<div id="content-wrapper">
 

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
+import fr.insa.soa.beans.AlarmBean;
 import fr.insa.soa.beans.HeaterBean;
 import fr.insa.soa.beans.TemperatureSensorBean;
 import fr.insa.soa.beans.WindowBean;
@@ -28,6 +30,7 @@ public class IndexServlet extends HttpServlet {
 	private HashMap<String, TemperatureSensorBean> temperatureSensorBeans;
 	private HashMap<String, HeaterBean> heaterBeans;
 	private HashMap<String, WindowBean> windowBeans;
+	private HashMap<String, AlarmBean> alarmBeans;
        
     /**
      * Constructor
@@ -38,6 +41,7 @@ public class IndexServlet extends HttpServlet {
         temperatureSensorBeans = new HashMap<String, TemperatureSensorBean>();
         heaterBeans = new HashMap<String, HeaterBean>();
         windowBeans = new HashMap<String, WindowBean>();
+        alarmBeans = new HashMap<String, AlarmBean>();
     }
 
     /**
@@ -48,6 +52,7 @@ public class IndexServlet extends HttpServlet {
 		request = aggregateTemperatureSensorsData(request);
 		request = aggregateHeatersData(request);
 		request = aggregateWindowsData(request);
+		request = computeAlarmsStatus(request);
 		this.getServletContext().getRequestDispatcher( "/index.jsp" ).forward( request, response );
 
 	}
@@ -213,5 +218,52 @@ public class IndexServlet extends HttpServlet {
 		
 	}
 	
+	private HttpServletRequest computeAlarmsStatus(HttpServletRequest request) {
+		for (Entry<String, TemperatureSensorBean> ts : temperatureSensorBeans.entrySet()) {
+			int roomNumber = Integer.parseInt(ts.getValue().getId().substring((ts.getValue().getId().length()-1), (ts.getValue().getId().length())));
+			
+			// Initialize entry with new bean if absent
+			AlarmBean newBean = new AlarmBean();
+			newBean.setRoomNumber(roomNumber);
+			alarmBeans.putIfAbsent(Integer.toString(roomNumber), newBean);	
+			if (Float.parseFloat(ts.getValue().getValue()) > 22.0) {
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(true);
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(false);
+			} else if (Float.parseFloat(ts.getValue().getValue()) < 15.0) {
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(true);
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(false);
+			} else {
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(false);
+				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(false);
+			}
+			
+			for (Entry<String, WindowBean> win : windowBeans.entrySet()) {
+				for (Entry<String, HeaterBean> heater : heaterBeans.entrySet()) {
+					if (win.getValue().getId().contains(Integer.toString(roomNumber)) && heater.getValue().getId().contains(Integer.toString(roomNumber))) {
+						alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(true);
+					} else {
+						alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(false);
+					}
+				}
+			}
+		}
+		
+		// Pass number of alarms as attribute
+		request.setAttribute("numberOfAlarms", alarmBeans.size() );			
+				
+		// Extract list of heaters and sort it by id
+		ArrayList<AlarmBean> beans = new ArrayList<AlarmBean>(alarmBeans.values());
+		beans.sort((AlarmBean o1, AlarmBean o2) -> Integer.compare(o1.getRoomNumber(),o2.getRoomNumber()));
+		
+		// Pass heater bean of each heater as attribute
+		int i=0;
+		for (AlarmBean bean : beans) {
+			request.setAttribute("a"+Integer.toString(i), bean);
+			i++;
+		}	
+		
+		return request;
+		
+	}
 
 }
