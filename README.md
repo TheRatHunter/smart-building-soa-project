@@ -1,5 +1,5 @@
-# smart-building-soa-project
-Use of a Service Oriented Architecture in order do develop a Smart Building Application.
+# Smart Building SOA Project
+Use of a Service Oriented Architecture in order do develop a Smart Building simulation.
 
 ![Interface view 1](./screen1.png)
 
@@ -10,10 +10,10 @@ Use of a Service Oriented Architecture in order do develop a Smart Building Appl
 ### Project import
 
 After downloading the project, extract it in your workplace and import it in Eclipse JAVA-EE.
-At this point you may encounter some configuration problem:
+At this point you may encounter some configuration problems:
 
 - Make sure you have at least you have JDK 1.7 and version 7 of TOMCAT web container
-- If you have the error ```"The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path"``` in one of the services --> Include  ```servlet-api-3.1.jar``` in your dependencies on ```TemperatureSensor/pom.xml```, ```Heaters/pom.xml``` and ```Windows/pom.xml``` by adding these lines :
+- If you have the error ```"The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path"``` in one of the services, include  ```servlet-api-3.1.jar``` in your dependencies on ```TemperatureSensor/pom.xml```, ```Heaters/pom.xml``` and ```Windows/pom.xml``` by adding these lines :
 
 ```
 <dependency>
@@ -26,7 +26,7 @@ At this point you may encounter some configuration problem:
  
 - Try then ```ALT+F5``` and force Updates of ```Snapshots/Releases``` on all the available Maven codebases.
  
-- If you have the problem ```"Multiple annotations found at this line:- Integer cannot be resolved to a type- The method getAttribute(String) from the type ServletRequest refers to the missing type Object"``` on the JSP under UserInterface --> it's a  problem of a missing Build path ! To solve this : Right click on UserInteface then Properties go to the JAVA Build path and check the Libraries, remove the JRE System Library the Re-add it.
+- If you have the problem ```"Multiple annotations found at this line:- Integer cannot be resolved to a type- The method getAttribute(String) from the type ServletRequest refers to the missing type Object"``` on the JSP under UserInterface, ot's a  problem of a missing Build path. To solve this : Right click on UserInteface -> Properties, go to the JAVA Build path and check the Libraries. Remove the JRE System Library then re-add it.
 
 - Finally, the UserInterface service wasn't created using Maven. Therefore, you will have to download the Jersey JARs at the URL below and add them onto ```UserInterface/WebContent/WEB-INF/lib```, otherwise  you will get ```classNotFound``` errors.
 
