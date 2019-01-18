@@ -23,6 +23,12 @@ At this point you may encounter some configuration problem:
 - Try then ```ALT+F5``` and force Updates of ```Snapshots/Releases``` on all the available Maven codebases.
  
 - If you have the problem ```"Multiple annotations found at this line:- Integer cannot be resolved to a type- The method getAttribute(String) from the type ServletRequest refers to the missing type Object"``` on the JSP under UserInterface --> it's a  problem of a missing Build path ! To solve this : Right click on UserInteface then Properties go to the JAVA Build path and check the Libraries, remove the JRE System Library the Re-add it.
+
+- Finally, the UserInterface service wasn't created using Maven. Therefore, you will have to download the Jersey JARs at the URL below and add them onto ```UserInterface/WebContent/WEB-INF/lib```, otherwise  you will get ```classNotFound``` errors.
+
+> https://jersey.github.io/download
+
+
  
 **Bingo !! The project is yours!!!**
 
