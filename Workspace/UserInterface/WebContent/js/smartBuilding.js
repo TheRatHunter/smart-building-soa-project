@@ -177,7 +177,9 @@ img.onload = function() {
 
 	// Legend drawing
 	drawLegend();
-	//drawAlarms();
+	if ($("#alarmstatus").text()==="ON") {
+		drawAlarms();
+	}
 };
 img.src = "img/plan.png";50
 
@@ -346,7 +348,7 @@ function drawHoveredTemperatureSensor(x, y, nb) {
 
 function drawAlarm(x, y) {
 	ctx.beginPath();
-	ctx.arc(x, y, 20, 0, 2 * Math.PI, false);
+	ctx.arc(x, y, 32, 0, 2 * Math.PI, false);
 	ctx.fillStyle = "rgb(200, 0, 0)"; 
 	ctx.fill();
 	ctx.lineWidth = 5;
@@ -354,8 +356,8 @@ function drawAlarm(x, y) {
 	ctx.stroke();
 
 	ctx.fillStyle = "rgb(70, 0, 0)";
-	ctx.font = "bold 16px Arial";
-	ctx.fillText("!!", x-5, y+6); 
+	ctx.font = "bold 32px Arial";
+	ctx.fillText("!!", x-10, y+10); 
 }
 
 function drawSensor(x, y, nb, color1, color2) {
@@ -451,11 +453,6 @@ function drawLegend() {
 
 
 
-function drawAlarms() {		
-	// Title
-	ctx.fillStyle = 'rgb(0,0,0)';
-	ctx.font = "bold 16px Arial";
-	ctx.fillText("Alarms :", 800, 60); 
-	
-	drawAlarm(800, 100);
+function drawAlarms() {
+	drawAlarm(880, 80);
 }

@@ -150,10 +150,18 @@
 					</div>
 				</div>
 			</li>
-			
+			<li class="nav-item"><a class="nav-link" href="">
+					<i class="fas fa-exclamation-circle"></i> <span>&nbsp;&nbsp;Alarms</span>
+			</a></li>
+			<li>
+				<div class="shadow">
+					<div class="container">
+						<p class="sidebar-element-title">Alarms</p>
+							
+						<ul>
 			<%
 		Integer numberOfAlarms = (Integer) request.getAttribute("numberOfAlarms");
-		out.println(String.format("<li hidden><span id=\"anb\">%s</span>",Integer.toString(numberOfAlarms)));
+		boolean alarmOn = false;
 		for (int i = 0; i < numberOfAlarms; i++) {
 				String attrName = "a" + Integer.toString(i);
 				fr.insa.soa.beans.AlarmBean bean = (fr.insa.soa.beans.AlarmBean) request
@@ -162,15 +170,34 @@
 					bean = new fr.insa.soa.beans.AlarmBean();
 					request.setAttribute(attrName, bean);
 				}
-				String alHigh = bean.isTemperatureHighAlarm() ? "ON" : "OFF";
-				String alLow = bean.isTemperatureLowAlarm() ? "ON" : "OFF";
-				String alBothOn = bean.isHeaterWindowBothOnAlarm()? "ON" : "OFF";
-				out.println(String.format("<span id=\"al%dhigh=\" hidden>%s</span><span id=\"al%dlow=\" hidden>%s</span><span id=\"al%dboth=\" hidden>%s</span>", i, alHigh, i, alLow, i, alBothOn));
+				String alHigh = bean.isTemperatureHighAlarm() ? "Temperature is too high in room "+Integer.toString(i)+" !" : "";
+				String alLow = bean.isTemperatureLowAlarm() ? "Temperature is too low in room "+Integer.toString(i)+" !" : "";
+				String alBothOn = bean.isHeaterWindowBothOnAlarm()? "The heater is on but the window is open in room "+Integer.toString(i)+" !" : "";
+				if (bean.isTemperatureHighAlarm()) {
+					alarmOn=true;
+					out.println(String.format("<li><span id=\"al%dhigh=\">%s</span></li>", i, alHigh));
+				} 
+				if (bean.isTemperatureLowAlarm()) {
+					alarmOn=true;
+					out.println(String.format("<li><span id=\"al%dlow=\">%s</span></li>", i, alLow));
+				} 
+				if (bean.isHeaterWindowBothOnAlarm()) {
+					alarmOn=true;
+					out.println(String.format("<li><span id=\"al%dboth=\">%s</span></li>", i, alBothOn));
+				}
 				
 		}
-		out.println("</li>");
+		if (alarmOn) {
+			out.println(String.format("<li hidden><span id=\"alarmstatus\">ON</span></li>"));
+		} else {
+			out.println(String.format("<li><span>Everything is fine ! <i class=\"far fa-smile-beam\"></i></span></li>"));
+			out.println(String.format("<li hidden><span id=\"alarmstatus\">OFF</span></li>"));			
+		}
 		%>
-			
+						</ul>
+					</div>
+				</div>
+			</li>	
 		</ul>
 		
 		

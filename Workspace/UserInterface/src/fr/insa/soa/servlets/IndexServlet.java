@@ -236,14 +236,15 @@ public class IndexServlet extends HttpServlet {
 				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(false);
 				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(false);
 			}
-			
+
+			alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(false);
 			for (Entry<String, WindowBean> win : windowBeans.entrySet()) {
 				for (Entry<String, HeaterBean> heater : heaterBeans.entrySet()) {
 					if (win.getValue().getId().contains(Integer.toString(roomNumber)) && heater.getValue().getId().contains(Integer.toString(roomNumber))) {
-						alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(true);
-					} else {
-						alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(false);
-					}
+						if (win.getValue().getStatus() && heater.getValue().getStatus()) {
+							alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(true);
+						}
+					} 
 				}
 			}
 		}
