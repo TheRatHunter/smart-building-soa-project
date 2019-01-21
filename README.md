@@ -34,7 +34,7 @@ At this point you may encounter some configuration problems:
 
 
  
-**Bingo !! The project is yours!!!**
+**Bingo ! The project is yours !**
 
 
 ### Tomcat RAM usage 
