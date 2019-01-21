@@ -124,6 +124,43 @@ function updateWindow(element)
 	}
 	updateCheckboxes();  
 }
+
+//Update orchestrator status on checkbox click
+function updateOrchestrator(element)
+{
+	if (element.checked) {
+		console.log("Sending orchestration request");
+		// Update span text
+		$("#valorchestrator").text("ON");
+		// Update span class
+		$("#valorchestrator").addClass('statusON').removeClass('statusOFF');
+		
+	} else {
+		console.log("Orchestration off");
+		// Update span text
+		$("#valorchestrator").text("OFF");
+		// Update span class
+		$("#valorchestrator").addClass('statusOFF').removeClass('statusON');
+	}
+	updateChexboxOrchestrator();  
+	
+}
+
+function updateChexboxOrchestrator() {
+	if (document.getElementById("checkboxorchestrator").checked === true) {
+		$("#valorchestrator").text("ON");	
+		$("#valorchestrator").addClass('statusON').removeClass('statusOFF');
+		
+		// Send orchestartion request
+		$.get("OrchestrationRequestservlet", function(responseText) {   // Execute Ajax GET request on URL of "someservlet" and execute the following function with Ajax response text...
+            $("#somediv").text(responseText);           // Locate HTML DOM element with ID "somediv" and set its text content with the response text.
+        });
+	} else {
+		$("#valorchestrator").text("OFF");
+		$("#valorchestrator").addClass('statusOFF').removeClass('statusON');
+	}
+}
+updateChexboxOrchestrator();
 	
 
 // Draw Image in canvas

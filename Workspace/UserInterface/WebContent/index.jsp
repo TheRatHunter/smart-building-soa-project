@@ -198,6 +198,28 @@
 					</div>
 				</div>
 			</li>	
+			
+			<li class="nav-item"><a class="nav-link" href="">
+					<i class="fas fa-lightbulb"></i> <span>&nbsp;&nbsp;Orchestrator</span>
+			</a></li>
+			<li>
+				<div class="shadow">
+					<div class="container">
+						<p class="sidebar-element-title">Orchestrator</p>
+						
+						<ul>
+							<li> <span>Orchestrator</span> : <b><span id="valorchestrator" class="statusOFF">OFF</span></b> <br/>
+							<label class="switch">
+							<input onchange="updateOrchestrator(this);" id="checkboxorchestrator" type="checkbox">
+							<span class="slider round"></span>
+							</label>
+							</li>
+
+						</ul>
+							
+					</div>
+				</div>
+			</li>
 		</ul>
 		
 		
