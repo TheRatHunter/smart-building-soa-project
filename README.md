@@ -103,6 +103,11 @@ To get a window's potition on the room map (GET) :
 
 > http://localhost:8080/Windows/webapi/windows/coordY?windowId=windowX
 
+### Orchestrator
+
+To trigger an autonomous adjustment of the actuators :
+
+> http://localhost:8080/Orchestrator/webapi/orchestrate
 
 ## Client
 
