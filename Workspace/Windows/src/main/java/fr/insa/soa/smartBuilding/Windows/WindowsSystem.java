@@ -35,6 +35,7 @@ public class WindowsSystem {
 	}
 	
 	public void setStatusOfWindow(String windowId, boolean status) {
+		System.out.println("[Windows] Changing "+windowId+" status to "+Boolean.toString(status));
 		windows.get(windowId).setStatus(status);
 	}
 }

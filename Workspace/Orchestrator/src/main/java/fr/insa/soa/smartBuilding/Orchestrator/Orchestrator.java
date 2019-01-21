@@ -1,12 +1,12 @@
 package fr.insa.soa.smartBuilding.Orchestrator;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.inject.Singleton;
-import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -16,13 +16,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import fr.insa.soa.beans.AlarmBean;
-import fr.insa.soa.beans.HeaterBean;
-import fr.insa.soa.beans.TemperatureSensorBean;
-import fr.insa.soa.beans.WindowBean;
 
 @Path("orchestrate")
 public class Orchestrator {
@@ -55,6 +52,23 @@ public class Orchestrator {
 		return restResponse.readEntity(ArrayList.class);
 	}
 	
+	private void restApiPut(String url) {
+		Client client = ClientBuilder.newClient();
+		Response restResponse = client.target(url).request().put(Entity.text("{}"));
+	}
+	
+	private void actOnWindow(String windowId, Boolean status) {
+		String putURI = "http://localhost:8080/Windows/webapi/windows/window/"+windowId+"/"+Boolean.toString(status);
+		System.out.println("[Orchestrator] Sending put : " + putURI);
+		restApiPut(putURI);
+	}
+	
+	private void actOnHeater(String heaterId, Boolean status) {
+		String putURI = "http://localhost:8080/Heaters/webapi/heaters/heater/"+heaterId+"/"+Boolean.toString(status);
+		System.out.println("[Orchestrator] Sending put : " + putURI);
+		restApiPut(putURI);
+	}
+	
 	private void getStatusAndTakeActions() {
 		
 		ArrayList<String> temperatureSensorNames = restApiGetArray("http://localhost:8080/TemperatureSensors/webapi/sensors");
@@ -83,6 +97,23 @@ public class Orchestrator {
 			windowsStatus.putIfAbsent(windowName, Boolean.parseBoolean(status));
 		}
 		
+		// Everything happening in this loop is atrocious, but I don't have time to do it clean
+		for (String sensorName : temperatureSensorNames) {
+			// Extract room number from sensor name (really dirty, I should really change this)
+			int roomNb = Integer.parseInt(Character.toString(sensorName.charAt(6)));
+			
+			if (temperatureSensorsValues.get(sensorName)>22.0) {
+				// Open window, shut down heater
+				actOnHeater(("heater"+Integer.toString(roomNb)), false);
+				actOnWindow(("window"+Integer.toString(roomNb)), true);
+			} else if (temperatureSensorsValues.get(sensorName)<15.0) {
+				// Close window, turn on heater
+				actOnHeater(("heater"+Integer.toString(roomNb)), true);
+				actOnWindow(("window"+Integer.toString(roomNb)), false);
+				
+			}
+		}	
+		/*
 		System.out.println("Sensors :");
 		for (String sensorName : temperatureSensorNames) {
 			System.out.println("\t"+sensorName+" : "+Float.toString(temperatureSensorsValues.get(sensorName)));
@@ -91,81 +122,18 @@ public class Orchestrator {
 		System.out.println("Heaters :");
 		for (String heaterName : heaterNames) {
 			System.out.println("\t"+heaterName+" : "+Boolean.toString(heatersStatus.get(heaterName)));
+			actOnHeater(heaterName, heatersStatus.get(heaterName));
 		}	
 		
 		System.out.println("Windows :");
 		for (String windowName : windowNames) {
 			System.out.println("\t"+windowName+" : "+Boolean.toString(windowsStatus.get(windowName)));
-		}	
+			actOnWindow(windowName, windowsStatus.get(windowName));
+		}*/
 		
-		
-		
-		/*
-			
-		// Pass number of temperature sensors as attribute
-		request.setAttribute("numberOfTemperatureSensors", temperatureSensorBeans.size() );			
-		
-		// Extract list of sensors and sort it by id
-		ArrayList<TemperatureSensorBean> beans = new ArrayList<TemperatureSensorBean>(temperatureSensorBeans.values());
-		beans.sort((TemperatureSensorBean o1, TemperatureSensorBean o2) -> o1.getId().compareTo(o2.getId()));
-		
-		// Pass sensor bean of each sensor as attribute
-		int i=0;
-		for (TemperatureSensorBean bean : beans) {
-			request.setAttribute("ts"+Integer.toString(i), bean);
-			i++;
-		}		
-		
-		
-		
-		
-		
-		for (Entry<String, TemperatureSensorBean> ts : temperatureSensorBeans.entrySet()) {
-			int roomNumber = Integer.parseInt(ts.getValue().getId().substring((ts.getValue().getId().length()-1), (ts.getValue().getId().length())));
-			
-			// Initialize entry with new bean if absent
-			AlarmBean newBean = new AlarmBean();
-			newBean.setRoomNumber(roomNumber);
-			alarmBeans.putIfAbsent(Integer.toString(roomNumber), newBean);	
-			if (Float.parseFloat(ts.getValue().getValue()) > 22.0) {
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(true);
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(false);
-			} else if (Float.parseFloat(ts.getValue().getValue()) < 15.0) {
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(true);
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(false);
-			} else {
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureLowAlarm(false);
-				alarmBeans.get(Integer.toString(roomNumber)).setTemperatureHighAlarm(false);
-			}
 
-			alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(false);
-			for (Entry<String, WindowBean> win : windowBeans.entrySet()) {
-				for (Entry<String, HeaterBean> heater : heaterBeans.entrySet()) {
-					if (win.getValue().getId().contains(Integer.toString(roomNumber)) && heater.getValue().getId().contains(Integer.toString(roomNumber))) {
-						if (win.getValue().getStatus() && heater.getValue().getStatus()) {
-							alarmBeans.get(Integer.toString(roomNumber)).setHeaterWindowBothOnAlarm(true);
-						}
-					} 
-				}
-			}
-		}
 		
-		// Pass number of alarms as attribute
-		request.setAttribute("numberOfAlarms", alarmBeans.size() );			
-				
-		// Extract list of heaters and sort it by id
-		ArrayList<AlarmBean> beans = new ArrayList<AlarmBean>(alarmBeans.values());
-		beans.sort((AlarmBean o1, AlarmBean o2) -> Integer.compare(o1.getRoomNumber(),o2.getRoomNumber()));
-		
-		// Pass heater bean of each heater as attribute
-		int i=0;
-		for (AlarmBean bean : beans) {
-			request.setAttribute("a"+Integer.toString(i), bean);
-			i++;
-		}	
-		
-		return request;
-		*/
+			
 		
 	}
 }

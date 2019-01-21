@@ -35,6 +35,7 @@ public class HeatersSystem {
 	}
 	
 	public void setStatusOfHeater(String heaterId, boolean status) {
+		System.out.println("[Heaters] Changing "+heaterId+" status to "+Boolean.toString(status));
 		heaters.get(heaterId).setStatus(status);
 	}
 }

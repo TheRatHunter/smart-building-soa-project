@@ -68,26 +68,26 @@ public class TemperatureSensor {
 		if (windowStatus.equals("true") && heaterStatus.equals("true")) {
 			if (this.lastTemperature>10.0) {
 				this.lastTemperature -= 1;
-				System.out.println("Temperature "+Integer.toString(this.getID())+" -1 ! Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" -1 ! Now "+Double.toString(this.lastTemperature));
 			} else {
-				System.out.println("Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
 			}
 		} else if (windowStatus.equals("false") && heaterStatus.equals("true")) {
 			if (this.lastTemperature<25.0) {
 				this.lastTemperature += 1;
-				System.out.println("Temperature "+Integer.toString(this.getID())+" +1 ! Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" +1 ! Now "+Double.toString(this.lastTemperature));
 			} else {
-				System.out.println("Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
 			}
 		} else if (windowStatus.equals("true") && heaterStatus.equals("false")) {
 			if (this.lastTemperature>10.0) {
 				this.lastTemperature -= 2;
-				System.out.println("Temperature "+Integer.toString(this.getID())+" -2 ! Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" -2 ! Now "+Double.toString(this.lastTemperature));
 			} else {
-				System.out.println("Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
+				System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
 			}
 		} else {
-			System.out.println("Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
+			System.out.println("[Temperature sensors] Temperature "+Integer.toString(this.getID())+" stable. Now "+Double.toString(this.lastTemperature));
 		}
 		
 		return this.lastTemperature;
