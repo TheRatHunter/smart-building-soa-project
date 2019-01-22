@@ -3,7 +3,7 @@ Use of a Service Oriented Architecture in order do develop a Smart Building simu
 
 ![Interface view 1](./screen1.png)
 
-![Interface view 2](./screen2.png)
+![Interface view 2](./screenOrchestrated.png)
 
 ## Setup
 
